@@ -1,0 +1,33 @@
+$colors: (
+    blue: #4299e1,
+    green: #48bb78,
+    orange: #ed8936,
+    red: #f56565,
+    purple: #9f7aea,
+    gray: #a0aec0,
+    yellow: #ecc94b,
+    indigo: #667eea,
+    pink: #ed64a6
+);
+
+@function color($color-name) {
+    @return var(--#{$color-name});
+}
+
+:root {
+    @each $name, $color in $colors {
+        --#{$name}: #{$color};
+    }
+}
+
+@each $name, $color in $colors {
+    .bg-#{$name} {
+        background: $color;
+    }
+    .bg-#{$name}-light {
+        background: lighten($color, 25%);
+    }
+    .text-#{$name}-dark {
+        color: darken($color, 10%);
+    }
+}

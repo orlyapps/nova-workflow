@@ -1,0 +1,20 @@
+{
+    "Current status": "Aktueller Status",
+    "Due": "Fällig",
+    "Due on": "Fällig am",
+    "Remove due date": "",
+    "Responsibility": "Veranwortlich",
+    "Next Step": "Nächste Schritte",
+    "Change due date": "Fälligkeit ändern",
+    "Save": "Speichern",
+    "My tasks": "Meine Aufgaben",
+    "All done!": "Alles erledigt!",
+    "Activities": "Aktivitäten",
+    "Comment": "Kommentar",
+    "Submit comment": "Kommentar absenden",
+    "Status successfully updated": "Status erfolgreich aktualisiert",
+    "Error when changing the due date": "Fehler beim ändern der Fälligkeit",
+    "Due date successfully updated": "Fälligkeit erfolgreich aktualisiert",
+    "Has removed the due date": "Hat die Fälligkeit entfernt",
+    "Has adjusted the due date to :date": "Hat die Fälligkeit auf den :date angepasst"
+}

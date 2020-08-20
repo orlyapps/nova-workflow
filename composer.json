@@ -1,0 +1,35 @@
+{
+    "name": "orlyapps/nova-workflow",
+    "description": "A Laravel Nova card.",
+    "keywords": [
+        "laravel",
+        "nova"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=7.2.0",
+        "illuminate/support": "5.8.* || 6.* || 7.*",
+        "symfony/event-dispatcher": "^5.0",
+        "symfony/workflow": "^5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Orlyapps\\NovaWorkflow\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Orlyapps\\NovaWorkflow\\NovaWorkflowServiceProvider"
+            ],
+            "aliases": {
+                "Workflow": "Orlyapps\\NovaWorkflow\\Facades\\WorkflowFacade"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
