@@ -1,3 +1,7 @@
+<p align="center">
+<img src="https://orlyapps.s3.eu-central-1.amazonaws.com/github/nova-workflow.png" alt="Nova Workflow">
+</p>
+
 <h3 align="center">Create and manage workflows with ease in Laravel Nova</h3>
 
   <p align="center">
