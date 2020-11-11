@@ -8,7 +8,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.2.0",
-        "illuminate/support": "5.8.* || 6.* || 7.*",
+        "illuminate/support": "5.8.* || 6.* || 7.* || 8.*",
         "symfony/event-dispatcher": "^5.0",
         "symfony/workflow": "^5.0"
     },
