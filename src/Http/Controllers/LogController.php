@@ -33,7 +33,7 @@ class LogController
         $model = $this->getModelForResource($request->resourceName, $request->resourceId);
         \Gate::authorize('update', $model);
 
-        $log = Log::create($request->all());
+        $log = Log::create($request->only(['comment']));
         $log->subject()->associate($model);
         $log->causer()->associate(\Auth::user());
         $log->save();
