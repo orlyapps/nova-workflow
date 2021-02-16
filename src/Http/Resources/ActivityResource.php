@@ -15,7 +15,7 @@ class ActivityResource extends JsonResource
      */
     public function toArray($request)
     {
-        $userResource = new \ReflectionProperty(Nova::resourceForKey('users'), 'title');
+        $userResource = new \ReflectionProperty(Nova::resourceForKey(config('workflow.activity_user_resource')), 'title');
         $titleField = $userResource->getValue(null);
 
         $user = optional($this->causer)->$titleField ?? 'System';

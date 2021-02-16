@@ -27,24 +27,17 @@ export default {
     },
     methods: {
         async onWriteComment(comment) {
-            const activity = (
-                await Nova.request().post(
-                    `/nova-vendor/nova-workflow/logs?resourceName=${this.resourceName}&resourceId=${this.resourceId}`,
-                    { comment }
-                )
-            ).data;
+            const activity = (await Nova.request().post(`/nova-vendor/nova-workflow/logs?resourceName=${this.resourceName}&resourceId=${this.resourceId}`, { comment })).data;
             this.$toasted.show("Kommentar erfolgreich gespeichert", { type: "success" });
             this.activities.unshift(activity);
         },
         async fetch() {
-            this.activities = (
-                await Nova.request().get(`/nova-vendor/nova-workflow/logs?resourceName=${this.resourceName}&resourceId=${this.resourceId}`)
-            ).data.data;
+            this.activities = (await Nova.request().get(`/nova-vendor/nova-workflow/logs?resourceName=${this.resourceName}&resourceId=${this.resourceId}`)).data.data;
         },
     },
 };
 </script>
-<style lang="scss" >
+<style lang="scss">
 .timeline {
     position: relative;
     display: flex;
