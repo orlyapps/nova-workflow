@@ -51,6 +51,16 @@ trait HasWorkflow
         return Workflow::get($this)->getEnabledTransitions($this);
     }
 
+    public function getStatusColorAttribute()
+    {
+        return data_get($this->statusColors(), $this->status);
+    }
+
+    public function getStatusLabelAttribute()
+    {
+        return data_get($this->statusLabels(), $this->status);
+    }
+
     public static function statusColors()
     {
         // $this klappt nicht weil es ein Trait ist
