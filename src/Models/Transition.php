@@ -6,10 +6,10 @@ use Orlyapps\NovaWorkflow\Actions\WorkflowAction;
 
 class Transition
 {
-    protected $from = [];
-    protected $to = [];
-    protected $action;
-    protected $entered;
+    public $from = [];
+    public $to = [];
+    public $action;
+    public $entered;
 
     protected $userInteraction = true;
 

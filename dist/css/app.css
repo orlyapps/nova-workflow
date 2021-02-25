@@ -1,1 +1,120 @@
-:root{--blue:#4299e1;--green:#48bb78;--orange:#ed8936;--red:#f56565;--purple:#9f7aea;--gray:#a0aec0;--yellow:#ecc94b;--indigo:#667eea;--pink:#ed64a6}.bg-blue{background:#4299e1}.bg-blue-light{background:#b0d4f2}.text-blue-dark{color:#2180cf}.bg-green{background:#48bb78}.bg-green-light{background:#a5debd}.text-green-dark{color:#389860}.bg-orange{background:#ed8936}.bg-orange-light{background:#f7ceab}.text-orange-dark{color:#dc6f14}.bg-red{background:#f56565}.bg-red-light{background:#fddddd}.text-red-dark{color:#f23535}.bg-purple{background:#9f7aea}.bg-purple-light{background:#eee8fb}.text-purple-dark{color:#7f4ee3}.bg-gray{background:#a0aec0}.bg-gray-light{background:#edeff3}.text-gray-dark{color:#8194ac}.bg-yellow{background:#ecc94b}.bg-yellow-light{background:#f8ecbe}.text-yellow-dark{color:#e7bb1d}.bg-indigo{background:#667eea}.bg-indigo-light{background:#d6ddf9}.text-indigo-dark{color:#3958e4}.bg-pink{background:#ed64a6}.bg-pink-light{background:#fad6e8}.text-pink-dark{color:#e8368c}
+:root {
+  --blue: #4299e1;
+  --green: #48bb78;
+  --orange: #ed8936;
+  --red: #f56565;
+  --purple: #9f7aea;
+  --gray: #a0aec0;
+  --yellow: #ecc94b;
+  --indigo: #667eea;
+  --pink: #ed64a6;
+}
+
+.bg-blue {
+  background: #4299e1;
+}
+
+.bg-blue-light {
+  background: #b0d4f2;
+}
+
+.text-blue-dark {
+  color: #2180cf;
+}
+
+.bg-green {
+  background: #48bb78;
+}
+
+.bg-green-light {
+  background: #a5debd;
+}
+
+.text-green-dark {
+  color: #389860;
+}
+
+.bg-orange {
+  background: #ed8936;
+}
+
+.bg-orange-light {
+  background: #f7ceab;
+}
+
+.text-orange-dark {
+  color: #dc6f14;
+}
+
+.bg-red {
+  background: #f56565;
+}
+
+.bg-red-light {
+  background: #fddddd;
+}
+
+.text-red-dark {
+  color: #f23535;
+}
+
+.bg-purple {
+  background: #9f7aea;
+}
+
+.bg-purple-light {
+  background: #eee8fb;
+}
+
+.text-purple-dark {
+  color: #7f4ee3;
+}
+
+.bg-gray {
+  background: #a0aec0;
+}
+
+.bg-gray-light {
+  background: #edeff3;
+}
+
+.text-gray-dark {
+  color: #8194ac;
+}
+
+.bg-yellow {
+  background: #ecc94b;
+}
+
+.bg-yellow-light {
+  background: #f8ecbe;
+}
+
+.text-yellow-dark {
+  color: #e7bb1d;
+}
+
+.bg-indigo {
+  background: #667eea;
+}
+
+.bg-indigo-light {
+  background: #d6ddf9;
+}
+
+.text-indigo-dark {
+  color: #3958e4;
+}
+
+.bg-pink {
+  background: #ed64a6;
+}
+
+.bg-pink-light {
+  background: #fad6e8;
+}
+
+.text-pink-dark {
+  color: #e8368c;
+}
+

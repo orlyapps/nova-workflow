@@ -15,12 +15,13 @@ class UserResource extends JsonResource
      */
     public function toArray($request)
     {
-        $userResource = new \ReflectionProperty(Nova::resourceForModel($this->resource), 'title');
-        $titleField = $userResource->getValue(null);
+        $userResource = Nova::resourceForModel($this->resource);
+        $titleField = (new \ReflectionProperty($userResource, 'title'))->getValue(null);
 
         return [
             'id' => $this->id,
-            'name' => $this->$titleField
+            'name' => $this->$titleField,
+            'resourceName' => $userResource::uriKey()
         ];
     }
 }

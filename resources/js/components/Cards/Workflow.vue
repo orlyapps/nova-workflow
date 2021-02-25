@@ -1,12 +1,14 @@
 <template>
     <card class="px-4 py-4">
         <div class="flex mb-3 relative">
-            <h3 class="mr-3 text-base text-80 font-bold">{{ __('Current status') }}</h3>
+            <h3 class="mr-3 text-base text-80 font-bold">{{ __("Current status") }}</h3>
             <span
                 v-if="state.dueIn"
                 class="whitespace-no-wrap px-2 py-1 rounded-full uppercase text-xs font-bold absolute pin-t pin-r"
-                :class="{'bg-orange-light text-orange-dark': state.duePast === false, 'bg-red-light text-red-dark' : state.duePast === true}"
-            >{{ __('Due') }} {{ state.dueIn }}</span>
+                :class="{ 'bg-orange-light text-orange-dark': state.duePast === false, 'bg-red-light text-red-dark': state.duePast === true }"
+            >
+                {{ __("Due") }} {{ state.dueIn }}
+            </span>
         </div>
         <div class="flex items-center mb-6">
             <span class="w-4 h-4 block rounded-full mr-3 bg-blue" :class="'bg-' + state.color"></span>
@@ -42,10 +44,19 @@
             <h3 class="mr-3 text-base text-80 mb-2">{{ __("Responsibility") }}</h3>
             <h5 class="font-light">
                 <span v-for="user in state.responsibleUsers" :key="user.id">
-                    <a
-                        :href="'/resources/users/' + user.id"
+                    <router-link
+                        :to="{
+                            name: 'detail',
+                            params: {
+                                resourceName: user.resourceName,
+                                resourceId: user.id,
+                            },
+                        }"
                         class="no-underline font-bold dim text-primary"
-                    >{{ user.name }}</a>,&nbsp;
+                    >
+                        {{ user.name }}
+                    </router-link>
+                    ,&nbsp;
                 </span>
             </h5>
         </div>
@@ -60,7 +71,9 @@
                     :dusk="'workflow-apply-' + transition.name"
                     @click.stop.prevent="apply(transition)"
                     v-if="transition.userInteraction"
-                >{{ transition.title }}</a>
+                >
+                    {{ transition.title }}
+                </a>
             </div>
         </div>
         <action-selector
@@ -75,21 +88,11 @@
         />
         <portal to="modals">
             <transition name="fade">
-                <modal
-                    @modal-close="handleClose"
-                    v-if="dueDateChangeModal"
-                    class-whitelist="flatpickr-calendar"
-                >
+                <modal @modal-close="handleClose" v-if="dueDateChangeModal" class-whitelist="flatpickr-calendar">
                     <div class="bg-white rounded-lg shadow-lg overflow-hidden" style="width:500px">
-                        <heading
-                            :level="2"
-                            class="border-b border-40 py-8 px-8"
-                        >{{ __("Change due date") }}</heading>
+                        <heading :level="2" class="border-b border-40 py-8 px-8">{{ __("Change due date") }}</heading>
                         <slot>
-                            <default-field
-                                :field="{attribute: 'due_in', name: __('Due on')}"
-                                :fullWidthContent="true"
-                            >
+                            <default-field :field="{ attribute: 'due_in', name: __('Due on') }" :fullWidthContent="true">
                                 <template slot="field">
                                     <date-time-picker
                                         class="w-full form-control form-input form-input-bordered"
@@ -101,28 +104,15 @@
                                         :first-day-of-week="1"
                                         @change="onDueChange"
                                     />
-                                    <a
-                                        v-if="dueAt"
-                                        href
-                                        class="no-underline font-bold dim text-primary pt-3 block"
-                                        @click.prevent.stop="clearDue"
-                                    >{{ __("Remove due date") }}</a>
+                                    <a v-if="dueAt" href class="no-underline font-bold dim text-primary pt-3 block" @click.prevent.stop="clearDue">{{ __("Remove due date") }}</a>
                                 </template>
                             </default-field>
                             <div class="bg-30 px-6 py-3 flex">
                                 <div class="flex items-center ml-auto">
-                                    <button
-                                        type="button"
-                                        @click.prevent="handleClose"
-                                        class="btn text-80 font-normal h-9 px-3 mr-3 btn-link"
-                                    >{{ __('Cancel') }}</button>
+                                    <button type="button" @click.prevent="handleClose" class="btn text-80 font-normal h-9 px-3 mr-3 btn-link">{{ __("Cancel") }}</button>
 
-                                    <button
-                                        type="submit"
-                                        @click.prevent="updateDue"
-                                        class="btn btn-default btn-primary"
-                                    >
-                                        <span>{{ __('Save') }}</span>
+                                    <button type="submit" @click.prevent="updateDue" class="btn btn-default btn-primary">
+                                        <span>{{ __("Save") }}</span>
                                     </button>
                                 </div>
                             </div>
@@ -205,18 +195,14 @@ export default {
             /**
              * Disable Confirmation on all default workflow action
              */
-            this.$refs.actionSelector.actions
-                .filter((i) => i.uriKey === "workflow-status-change")
-                .map((i) => (i.withoutConfirmation = true));
+            this.$refs.actionSelector.actions.filter((i) => i.uriKey === "workflow-status-change").map((i) => (i.withoutConfirmation = true));
 
             this.$refs.actionSelector.selectedActionKey = transition.action;
 
             /**
              * Removes the 'hidden' transition field so nothing is shown to the end user
              */
-            this.$refs.actionSelector.selectedAction.fields = this.$refs.actionSelector.selectedAction.fields.filter(
-                (i) => i.name !== "transition"
-            );
+            this.$refs.actionSelector.selectedAction.fields = this.$refs.actionSelector.selectedAction.fields.filter((i) => i.name !== "transition");
 
             /**
              * Inject the 'transition' parameter in the handle request
@@ -253,11 +239,7 @@ export default {
         },
 
         async reloadStatus() {
-            this.state = (
-                await Nova.request().get(
-                    `/nova-vendor/nova-workflow/workflow?resourceName=${this.resourceName}&resourceId=${this.resourceId}`
-                )
-            ).data;
+            this.state = (await Nova.request().get(`/nova-vendor/nova-workflow/workflow?resourceName=${this.resourceName}&resourceId=${this.resourceId}`)).data;
         },
         reloadDetailView() {
             for (const component of this.$root.$children) {
@@ -278,7 +260,7 @@ export default {
     },
 };
 </script>
-<style >
+<style>
 .action-selector > div {
     visibility: hidden;
     display: none;
