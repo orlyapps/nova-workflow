@@ -7,7 +7,7 @@ $colors: (
     gray: #a0aec0,
     yellow: #ecc94b,
     indigo: #667eea,
-    pink: #ed64a6
+    pink: #ed64a6,
 );
 
 @function color($color-name) {
@@ -29,5 +29,11 @@ $colors: (
     }
     .text-#{$name}-dark {
         color: darken($color, 10%);
+    }
+    .text-#{$name}-light {
+        color: darken($color, 10%);
+    }
+    .bg-#{$name}-dark {
+        background: darken($color, 10%);
     }
 }

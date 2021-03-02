@@ -38,7 +38,11 @@ trait HasWorkflow
 
     public function workflow_apply($transition, $workflow = null)
     {
-        return Workflow::get($this, $workflow)->apply($this, $transition);
+        if ($this->workflow_can($transition)) {
+            Workflow::get($this, $workflow)->apply($this, $transition);
+        }
+
+        return $this;
     }
 
     public function workflow_can($transition, $workflow = null)
