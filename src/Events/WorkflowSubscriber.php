@@ -2,7 +2,6 @@
 
 namespace Orlyapps\NovaWorkflow\Events;
 
-use Orlyapps\NovaWorkflow\Models\Log;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Workflow\Event\Event;
 use Symfony\Component\Workflow\Event\GuardEvent as SymfonyGuardEvent;
@@ -19,7 +18,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
         $policyName = \Str::camel($transitionName);
         $policyExists = method_exists(\Gate::getPolicyFor($object), $policyName);
-        
+
         if ($user && $policyExists) {
             $event->setBlocked(!$user->can($policyName, $object));
         } else {
@@ -29,42 +28,6 @@ class WorkflowSubscriber implements EventSubscriberInterface
         event('workflow.guard', $event);
         event(sprintf('workflow.%s.guard', $workflowName), $event);
         event(sprintf('workflow.%s.guard.%s', $workflowName, $transitionName), $event);
-    }
-
-    public function leaveEvent(Event $event)
-    {
-        $places = $event->getTransition()->getFroms();
-        $workflowName = $event->getWorkflowName();
-
-        event('workflow.leave', $event);
-        event(sprintf('workflow.%s.leave', $workflowName), $event);
-
-        foreach ($places as $place) {
-            event(sprintf('workflow.%s.leave.%s', $workflowName, $place), $event);
-        }
-    }
-
-    public function transitionEvent(Event $event)
-    {
-        $workflowName = $event->getWorkflowName();
-        $transitionName = $event->getTransition()->getName();
-
-        event('workflow.transition', $event);
-        event(sprintf('workflow.%s.transition', $workflowName), $event);
-        event(sprintf('workflow.%s.transition.%s', $workflowName, $transitionName), $event);
-    }
-
-    public function enterEvent(Event $event)
-    {
-        $places = $event->getTransition()->getTos();
-        $workflowName = $event->getWorkflowName();
-
-        event('workflow.enter', $event);
-        event(sprintf('workflow.%s.enter', $workflowName), $event);
-
-        foreach ($places as $place) {
-            event(sprintf('workflow.%s.enter.%s', $workflowName, $place), $event);
-        }
     }
 
     public function enteredEvent(Event $event)
@@ -85,7 +48,8 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $to = $event->getTransition()->getTos();
         $from = $event->getTransition()->getFroms();
 
-        $log = new Log();
+        $logModelClass = config('workflow.log_model');
+        $log = new $logModelClass();
         $log->fill(['from' => $from[0], 'to' => $to[0], 'transition' => $transitionName]);
         $log->subject()->associate($object);
 
@@ -98,18 +62,14 @@ class WorkflowSubscriber implements EventSubscriberInterface
         if ($place->dueIn) {
             $log->due_at = (new \DateTime())->add(\DateInterval::createFromDateString($place->dueIn));
         }
-
-        $log->save();
-
-        // Observer Events werden aufgerufen
-        $method = \Str::camel($transitionName);
-        $object->fire($method);
-
-        event('workflow.entered', $event);
-        event(sprintf('workflow.%s.entered', $workflowName), $event);
-
-        foreach ($places as $place) {
-            event(sprintf('workflow.%s.entered.%s', $workflowName, $place), $event);
+        // only save when a place change
+        if (optional($object->lastLog)->to !== $to[0]) {
+            $log->save();
+            event('nova-workflow.entered', $log);
+            event(sprintf('nova-workflow.%s.entered', $workflowName), $log);
+            // Observer Events werden aufgerufen
+            $method = \Str::camel($transitionName);
+            $object->fire($method);
         }
     }
 
@@ -127,11 +87,8 @@ class WorkflowSubscriber implements EventSubscriberInterface
     {
         return [
             'workflow.guard' => ['guardEvent'],
-            'workflow.leave' => ['leaveEvent'],
-            'workflow.transition' => ['transitionEvent'],
-            'workflow.enter' => ['enterEvent'],
+
             'workflow.entered' => ['enteredEvent'],
-            'workflow.completed' => ['completedEvent'],
         ];
     }
 }

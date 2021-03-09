@@ -105,7 +105,7 @@ trait HasWorkflow
 
     public function logComment(User $user, $comment)
     {
-        $log = Log::create(['comment' => $comment]);
+        $log = config('workflow.log_model')::create(['comment' => $comment]);
         $log->subject()->associate($this);
         $log->causer()->associate($user);
         $log->save();
@@ -123,8 +123,8 @@ trait HasWorkflow
         if ($this->status == null) {
             $this->status = $definition->initialPlace;
         }
-
-        $log = new Log(['to' => $this->status]);
+        $logModelClass = config('workflow.log_model');
+        $log = new $logModelClass(['to' => $this->status]);
         $log->subject()->associate($this);
 
         if (\Auth::user()) {
@@ -161,11 +161,11 @@ trait HasWorkflow
 
     public function getLastLogAttribute()
     {
-        return Log::forSubject($this)->whereNotNull('to')->orderByDesc('created_at')->first();
+        return config('workflow.log_model')::forSubject($this)->whereNotNull('to')->orderByDesc('created_at')->first();
     }
 
     public function getLastLogCommentAttribute()
     {
-        return Log::forSubject($this)->whereNotNull('comment')->orderByDesc('created_at')->first();
+        return config('workflow.log_model')::forSubject($this)->whereNotNull('comment')->orderByDesc('created_at')->first();
     }
 }

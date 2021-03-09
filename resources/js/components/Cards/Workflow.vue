@@ -163,6 +163,7 @@ export default {
                 this.reloadDetailView();
                 this.reloadStatus();
                 this.originalHandler(response);
+                Nova.$emit("resources-loaded");
             };
         },
         clearDue() {

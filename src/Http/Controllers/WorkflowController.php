@@ -8,7 +8,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Laravel\Nova\Nova;
 use Orlyapps\NovaWorkflow\Http\Resources\UserResource;
-use Orlyapps\NovaWorkflow\Models\Log;
 
 class WorkflowController
 {
@@ -35,9 +34,9 @@ class WorkflowController
 
         $this->authorize('changeDue', $model);
 
-        $log = Log::find($logId);
+        $log = config('workflow.log_model')::find($logId);
 
-        $commentLog = Log::create();
+        $commentLog = config('workflow.log_model')::create();
         $commentLog->subject()->associate($model);
         $commentLog->causer()->associate(\Auth::user());
 

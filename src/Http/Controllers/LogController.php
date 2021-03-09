@@ -5,7 +5,6 @@ namespace Orlyapps\NovaWorkflow\Http\Controllers;
 use Illuminate\Http\Request;
 use Laravel\Nova\Nova;
 use Orlyapps\NovaWorkflow\Http\Resources\ActivityResource;
-use Orlyapps\NovaWorkflow\Models\Log;
 
 class LogController
 {
@@ -17,7 +16,8 @@ class LogController
     public function index(Request $request)
     {
         $model = $this->getModelForResource($request->resourceName, $request->resourceId);
-        $activities = Log::forSubject($model)->orderBy('created_at', 'desc')->get();
+
+        $activities = config('workflow.log_model')::forSubject($model)->orderBy('created_at', 'desc')->get();
 
         return ActivityResource::collection($activities);
     }
@@ -33,7 +33,7 @@ class LogController
         $model = $this->getModelForResource($request->resourceName, $request->resourceId);
         \Gate::authorize('update', $model);
 
-        $log = Log::create($request->only(['comment']));
+        $log = config('workflow.log_model')::create($request->only(['comment']));
         $log->subject()->associate($model);
         $log->causer()->associate(\Auth::user());
         $log->save();
