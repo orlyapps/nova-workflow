@@ -1,13 +1,16 @@
 $colors: (
-    blue: #4299e1,
-    green: #48bb78,
-    orange: #ed8936,
-    red: #f56565,
+    blue: #3b82f6,
+    cyan: #06b6d4,
+    lightBlue: #0ea5e9,
+    green: #22c55e,
+    lime: #84cc16,
+    orange: #f97316,
+    red: #ef4444,
     purple: #9f7aea,
     gray: #a0aec0,
-    yellow: #ecc94b,
-    indigo: #667eea,
-    pink: #ed64a6,
+    yellow: #facc15,
+    indigo: #6366f1,
+    pink: #ec4899,
 );
 
 @function color($color-name) {

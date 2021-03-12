@@ -133,6 +133,58 @@ trait HasWorkflow
         $log->save();
     }
 
+    public function getCurrentPlace()
+    {
+        return $this->getPlace($this->status);
+    }
+
+    public function getPlace($place)
+    {
+        $definition = $this->getWorkflowDefinition();
+        $meta = $definition->place($place)->metadata();
+
+        return [
+            'name' => $place,
+            'title' => $meta['title'],
+            'color' => $meta['color']
+        ];
+    }
+
+    public function getTransitions()
+    {
+        $policy = \Gate::getPolicyFor($this);
+
+        $transitionsArray = $this->workflow_transitions();
+        $metadataStore = Workflow::get($this)->getMetadataStore();
+
+        $transitions = [];
+        foreach ($transitionsArray as $transition) {
+            $transitionName = $transition->getName();
+            $metadata = $metadataStore->getTransitionMetadata($transition);
+
+            $policyName = \Str::camel('can_see_' . $transitionName);
+            $policyExists = method_exists($policy, $policyName);
+
+            // Default die actions anzeigen, nur wenn eine Policy existiert prüfen
+            $canSee = true;
+            if ($policyExists) {
+                $canSee = \Auth::user()->can($policyName, $this);
+            }
+
+            if ($canSee) {
+                $transitions[] = [
+                    'name' => $transitionName,
+                    'title' => $metadata['title'],
+                    'action' => \Arr::get($metadata, 'action', null),
+                    'to' => $this->getPlace($transition->getTos()[0]),
+                    'userInteraction' => \Arr::get($metadata, 'userInteraction', true),
+                ];
+            }
+        }
+
+        return $transitions;
+    }
+
     /**
      * Gibt die Workflow Configuration zurück
      */
