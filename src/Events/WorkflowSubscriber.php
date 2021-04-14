@@ -16,8 +16,13 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $object = $event->getSubject();
         $user = \Auth::user();
 
-        $policyName = \Str::camel($transitionName);
-        $policyExists = method_exists(\Gate::getPolicyFor($object), $policyName);
+        $policy = \Gate::getPolicyFor($object);        
+        $policyName = \Str::camel($transitionName); 
+        $policyExists = false;
+
+        if($policy) {                   
+            $policyExists = method_exists($policy, $policyName);    
+        }
 
         if ($user && $policyExists) {
             $event->setBlocked(!$user->can($policyName, $object));
