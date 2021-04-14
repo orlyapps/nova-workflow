@@ -96,7 +96,10 @@ class WorkflowController
             $metadata = $metadataStore->getTransitionMetadata($transition);
 
             $policyName = \Str::camel('can_see_' . $transitionName);
-            $policyExists = method_exists($policy, $policyName);
+            $policyExists = false;
+            if ($policy) {
+                $policyExists = method_exists($policy, $policyName);
+            }
 
             // Default die actions anzeigen, nur wenn eine Policy existiert prüfen
             $canSee = true;
