@@ -56,6 +56,16 @@ class WorkflowDefinition
             })
         ];
     }
+    
+    public function placesOptionArray()
+    {
+        return $this->toArray()['places']->mapWithKeys(
+            function ($place) {
+                return [array_key_first($place) => head($place)['metadata']['title']];
+            }
+        );
+    }
+    
 
     public function place($placeName)
     {
