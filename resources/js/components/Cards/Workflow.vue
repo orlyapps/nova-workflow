@@ -149,6 +149,12 @@ export default {
         this.originalHandler = this.$refs.actionSelector.handleActionResponse;
 
         this.overwriteActionHandler();
+        Nova.$on("resources-loaded", async () => {
+            await this.reloadStatus();
+        });
+    },
+    destroyed() {
+        Nova.$off("resources-loaded");
     },
     methods: {
         overwriteActionHandler() {
