@@ -16,12 +16,12 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $object = $event->getSubject();
         $user = \Auth::user();
 
-        $policy = \Gate::getPolicyFor($object);        
-        $policyName = \Str::camel($transitionName); 
+        $policy = \Gate::getPolicyFor($object);
+        $policyName = \Str::camel($transitionName);
         $policyExists = false;
 
-        if($policy) {                   
-            $policyExists = method_exists($policy, $policyName);    
+        if ($policy) {
+            $policyExists = method_exists($policy, $policyName);
         }
 
         if ($user && $policyExists) {
@@ -37,6 +37,9 @@ class WorkflowSubscriber implements EventSubscriberInterface
 
     public function enteredEvent(Event $event)
     {
+        if ($event->getTransition() == null) {
+            return;
+        }
         $places = $event->getTransition() ? $event->getTransition()->getTos() : [];
         $workflowName = $event->getWorkflowName();
         $transitionName = $event->getTransition()->getName();

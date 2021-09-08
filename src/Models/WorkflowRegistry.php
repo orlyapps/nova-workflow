@@ -3,6 +3,7 @@
 namespace Orlyapps\NovaWorkflow\Models;
 
 use Orlyapps\NovaWorkflow\Events\WorkflowSubscriber;
+use Orlyapps\NovaWorkflow\SupportStrategy\ClassSupportStrategy;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Workflow\DefinitionBuilder;
 use Symfony\Component\Workflow\MarkingStore\MethodMarkingStore;
@@ -140,7 +141,8 @@ class WorkflowRegistry
         $workflowObj = new Workflow($definition, $markingStore, $this->dispatcher, $workflow->name);
 
         foreach ($workflow->supports as $supportedClass) {
-            $this->registry->addWorkflow($workflowObj, new InstanceOfSupportStrategy($supportedClass));
+            $supportStrategy = $workflow->supportStrategy();
+            $this->registry->addWorkflow($workflowObj, new $supportStrategy($supportedClass));
         }
     }
 }

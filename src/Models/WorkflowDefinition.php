@@ -2,13 +2,15 @@
 
 namespace Orlyapps\NovaWorkflow\Models;
 
+use Symfony\Component\Workflow\SupportStrategy\InstanceOfSupportStrategy;
+
 class WorkflowDefinition
 {
     /**
-    * The class the workflow corresponds to.
-    *
-    * @var string
-    */
+     * The class the workflow corresponds to.
+     *
+     * @var string
+     */
     public $name = null;
 
     public $initialPlace = null;
@@ -56,7 +58,7 @@ class WorkflowDefinition
             })
         ];
     }
-    
+
     public function placesOptionArray()
     {
         return $this->toArray()['places']->mapWithKeys(
@@ -65,7 +67,7 @@ class WorkflowDefinition
             }
         );
     }
-    
+
 
     public function place($placeName)
     {
@@ -75,5 +77,10 @@ class WorkflowDefinition
     public function transition($transitionName)
     {
         return collect($this->transitions())->where('name', $transitionName)->first();
+    }
+
+    public function supportStrategy()
+    {
+        return InstanceOfSupportStrategy::class;
     }
 }

@@ -38,8 +38,8 @@ class NovaWorkflowServiceProvider extends ServiceProvider
 
         // Publish your config
         $this->publishes([
-                __DIR__ . '/../config/config.php' => config_path('workflow.php'),
-            ], 'config');
+            __DIR__ . '/../config/config.php' => config_path('workflow.php'),
+        ], 'config');
 
         $this->macros();
     }
@@ -90,9 +90,9 @@ class NovaWorkflowServiceProvider extends ServiceProvider
         }
 
         Route::middleware(['nova'])
-                ->namespace('Orlyapps\NovaWorkflow\Http\Controllers')
-                ->prefix('nova-vendor/nova-workflow')
-                ->group(__DIR__ . '/../routes/api.php');
+            ->namespace('Orlyapps\NovaWorkflow\Http\Controllers')
+            ->prefix('nova-vendor/nova-workflow')
+            ->group(__DIR__ . '/../routes/api.php');
     }
 
     /**
@@ -135,8 +135,10 @@ class NovaWorkflowServiceProvider extends ServiceProvider
                 Str::after($workflow->getPathname(), app_path() . DIRECTORY_SEPARATOR)
             );
 
-            if (is_subclass_of($workflow, WorkflowDefinition::class) &&
-                !(new \ReflectionClass($workflow))->isAbstract()) {
+            if (
+                is_subclass_of($workflow, WorkflowDefinition::class) &&
+                !(new \ReflectionClass($workflow))->isAbstract()
+            ) {
                 $workflows[] = new $workflow();
             }
         }
