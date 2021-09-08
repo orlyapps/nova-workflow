@@ -13,7 +13,7 @@ class TodoCard extends Card
      *
      * @var string
      */
-    public $width = '1/2';
+    public $width = '1/2';  
 
     /**
      * Get the component name for the element.

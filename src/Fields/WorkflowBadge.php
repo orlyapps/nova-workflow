@@ -37,5 +37,6 @@ class WorkflowBadge extends NovaBadge
         'yellow' => 'bg-yellow-light text-yellow-dark',
         'indigo' => 'bg-indigo-light text-indigo-dark',
         'pink' => 'bg-pink-light text-pink-dark',
+        'cyan' => 'bg-cyan-light text-cyan-dark',
     ];
 }
