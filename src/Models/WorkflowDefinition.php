@@ -67,6 +67,15 @@ class WorkflowDefinition
             }
         );
     }
+    
+    public function transistionsOptionArray()
+    {
+        return $this->toArray()['transitions']->mapWithKeys(
+            function ($place) {
+                return [array_key_first($place) => head($place)['metadata']['title']];
+            }
+        );
+    }
 
 
     public function place($placeName)
