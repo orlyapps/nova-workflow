@@ -22,6 +22,15 @@ class WorkflowBadge extends NovaBadge
         $this->labels($className::statusLabels());
     }
 
+    public function limit($limit = 5)
+    {
+        foreach ($this->labels as $key => $value) {
+            $this->labels[$key] = \Str::limit($value, $limit);
+        }
+
+        return $this;
+    }
+
     /**
      * The built-in badge types and their corresponding CSS classes.
      *
