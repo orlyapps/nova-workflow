@@ -14,12 +14,7 @@ class StatusFilter extends Filter
      */
     public $name = 'Status';
 
-    /**
-     * The underlying model resource instance.
-     *
-     * @var \Illuminate\Database\Eloquent\Model
-     */
-    public $resource;
+
 
     /**
      * The filter's component.
@@ -28,9 +23,8 @@ class StatusFilter extends Filter
      */
     public $component = 'select-filter';
 
-    public function __construct($instance)
+    public function __construct(public $resource, public $whereField = "status")
     {
-        $this->resource = $instance;
     }
 
     /**
@@ -43,7 +37,7 @@ class StatusFilter extends Filter
      */
     public function apply(Request $request, $query, $value)
     {
-        return $query->where('status', $value);
+        return $query->where($this->whereField, $value);
     }
 
     /**
@@ -55,6 +49,7 @@ class StatusFilter extends Filter
     public function options(Request $request)
     {
         $model = new $this->resource::$model();
+
         return array_flip(get_class($model)::statusLabels());
     }
 }
