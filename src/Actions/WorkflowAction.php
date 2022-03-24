@@ -45,9 +45,14 @@ class WorkflowAction extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach ($models as $model) {
-            $workflow = \Workflow::get($model, \Str::lower(class_basename($model)));
-            $workflow->apply($model, request()->transition);
-            $model->save();
+            try {
+                $workflow = \Workflow::get($model, \Str::lower(class_basename($model)));
+                $workflow->apply($model, request()->transition);
+                $model->save();
+            } catch (\Throwable $th) {
+                //throw $th;
+            }
+           
         }
     }
 
