@@ -12,6 +12,8 @@ class Place
 
     public $dueIn;
 
+    public $externalLabel;
+
     public function __construct(string $label, string $name)
     {
         $this->label = $label;
@@ -23,15 +25,24 @@ class Place
         return new static($label,$name);
     }
 
+    public function externalLabel($externalLabel)
+    {
+        $this->externalLabel = $externalLabel;
+
+        return $this;
+    }
+
     public function dueIn($dueIn)
     {
         $this->dueIn = $dueIn;
+
         return $this;
     }
 
     public function color($color)
     {
         $this->color = $color;
+
         return $this;
     }
 
@@ -39,8 +50,8 @@ class Place
     {
         return [
             $this->name => [
-                'metadata' => $this->metadata()
-            ]
+                'metadata' => $this->metadata(),
+            ],
         ];
     }
 
@@ -49,7 +60,8 @@ class Place
         return [
             'title' => $this->label,
             'color' => $this->color,
-            'dueIn' => $this->dueIn
+            'dueIn' => $this->dueIn,
+            'externalLabel' => $this->externalLabel,
         ];
     }
 }

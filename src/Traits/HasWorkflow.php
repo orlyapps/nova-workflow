@@ -146,7 +146,9 @@ trait HasWorkflow
         return [
             'name' => $place,
             'title' => $meta['title'],
-            'color' => $meta['color']
+            'color' => $meta['color'],
+            'externalLabel' => $meta['externalLabel'] ?? $meta['title'],
+            'externalColor' => $meta['externalColor'] ?? $meta['color'],
         ];
     }
 
