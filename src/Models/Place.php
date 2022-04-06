@@ -14,6 +14,8 @@ class Place
 
     public $externalLabel;
 
+    public $externalColor;
+
     public function __construct(string $label, string $name)
     {
         $this->label = $label;
@@ -45,6 +47,14 @@ class Place
 
         return $this;
     }
+
+    public function externalColor($externalColor)
+    {
+        $this->externalColor = $externalColor;
+
+        return $this;
+    }
+
 
     public function toArray()
     {
