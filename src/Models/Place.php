@@ -55,7 +55,6 @@ class Place
         return $this;
     }
 
-
     public function toArray()
     {
         return [
@@ -72,6 +71,7 @@ class Place
             'color' => $this->color,
             'dueIn' => $this->dueIn,
             'externalLabel' => $this->externalLabel,
+            'externalColor' => $this->externalColor,
         ];
     }
 }
