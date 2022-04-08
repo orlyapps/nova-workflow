@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Laravel\Nova\Events\ServingNova;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Nova;
+use Orlyapps\NovaWorkflow\Console\MakeWorkflowCommand;
 use Orlyapps\NovaWorkflow\Models\WorkflowDefinition;
 use Orlyapps\NovaWorkflow\Models\WorkflowRegistry;
 use Symfony\Component\Finder\Finder;
@@ -42,6 +43,10 @@ class NovaWorkflowServiceProvider extends ServiceProvider
         ], 'config');
 
         $this->macros();
+
+        $this->commands([
+            MakeWorkflowCommand::class,
+        ]);
     }
 
     public function macros()

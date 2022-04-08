@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class WorkflowAction extends Action
 {
@@ -52,7 +53,6 @@ class WorkflowAction extends Action
             } catch (\Throwable $th) {
                 //throw $th;
             }
-           
         }
     }
 
@@ -61,7 +61,7 @@ class WorkflowAction extends Action
      *
      * @return array
      */
-    public function fields()
+    public function fields(NovaRequest $request)
     {
         return [
             Text::make('transition')

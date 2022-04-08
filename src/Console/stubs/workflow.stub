@@ -1,0 +1,50 @@
+<?php
+
+namespace {{ namespace }};
+
+use Laravel\Nova\Makeable;
+use App\Models\{{ class }};
+use Orlyapps\NovaWorkflow\Models\Place;
+use Orlyapps\NovaWorkflow\Models\Transition;
+use Orlyapps\NovaWorkflow\Models\WorkflowDefinition;
+
+class {{ class }}Workflow extends WorkflowDefinition
+{
+    use Makeable;
+
+    /**
+     * Internal name of the Workflow
+     */
+    public $name = '{{ class }}';
+
+    public $initialPlace = 'draft';
+
+    /**
+     * The class the workflow corresponds to.
+     *
+     * @var string
+     */
+    public $supports = [{{ class }}::class];
+
+    public function places()
+    {
+        return [
+            Place::make('Draft', 'draft')->color('yellow'),
+            Place::make('Published', 'published')->color('green')
+        ];
+    }
+
+    public function transitions()
+    {
+        return [
+             Transition::make('Publish', 'publish')
+                ->from(['draft'])
+                ->to('published'),
+        ];
+    }
+
+    public function users($order, $placeName)
+    {
+        return [];
+    }
+}
