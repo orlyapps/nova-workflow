@@ -1,6 +1,5 @@
-require("./components/ResourceTools/Workflow");
+import Card from "./components/Cards/Workflow3";
 
-Nova.booting((Vue, router, store) => {
-    Vue.component("workflow-card", require("./components/Cards/Workflow").default);
-    Vue.component("todo-card", require("./components/Cards/Todo").default);
+Nova.booting((app,  store) => {
+    app.component("workflow-card", Card);
 });

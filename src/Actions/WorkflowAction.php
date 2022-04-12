@@ -27,7 +27,7 @@ class WorkflowAction extends Action
      *
      * @var bool
      */
-    public $showOnDetail = false;
+    public $showOnDetail = true;
 
     /**
      * Indicates if this action is available on the resource index view.

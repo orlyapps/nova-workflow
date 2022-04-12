@@ -35,3 +35,19 @@ class User extends Model
 {
     use HasWorkflow;
 ```
+
+```bash
+php artisan make:migration "add status to users" --table=users
+```
+```php
+<?php
+
+return new class extends Migration {
+
+    public function up()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('status')->default('draft')->nullable();
+        });
+    }
+```
