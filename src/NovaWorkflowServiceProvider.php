@@ -47,6 +47,13 @@ class NovaWorkflowServiceProvider extends ServiceProvider
         $this->commands([
             MakeWorkflowCommand::class,
         ]);
+
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../database/migrations/2017_09_28_1000001_workflow_migration.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_workflow_migration.php'),
+                // you can add any number of migrations here
+            ], 'migrations');
+        }
     }
 
     public function macros()

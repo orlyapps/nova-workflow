@@ -60,11 +60,10 @@
             </h5>
         </div>
 
-        <div v-if="state.transitions && state.transitions.length">
-            <h3 class="uppercase tracking-wide font-bold">{{ __("Next Step") }}</h3>
+        <div v-if="state.transitions && state.transitions.length"  class="space-y-2">
             <p class="text-80 mb-4 text-sm w-1/2" v-if="state.description">{{ state.description }}</p>
             <div v-for="transition in state.transitions" :key="transition.name">
-                <DefaultButton v-if="transition.userInteraction" @click.stop.prevent="apply(transition)">{{ transition.title }}</DefaultButton>
+                <OutlineButton class="w-full" v-if="transition.userInteraction" @click.stop.prevent="apply(transition)">{{ transition.title }}</OutlineButton>
             </div>
         </div>
         <div class="action-selector">
@@ -134,6 +133,7 @@ export default {
             /**
              * Disable Confirmation on all default workflow action
              */
+            console.log(this.$refs.actionSelector.availableActions);
             this.$refs.actionSelector.actions.filter((i) => i.uriKey === "workflow-status-change").map((i) => (i.withoutConfirmation = true));
 
             this.$refs.actionSelector.selectedActionKey = transition.action;
