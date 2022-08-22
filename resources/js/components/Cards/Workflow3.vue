@@ -1,7 +1,7 @@
 <template>
     <Card class="px-4 py-4 space-y-4">
         <div class="flex mb-3 relative">
-            <h3 class="text-90 uppercase tracking-wide font-bold md:text-sm">{{ __("Current status") }}</h3>
+            <h3 class="text-90 uppercase tracking-wide font-bold md:text-sm">Aktueller Status</h3>
             <span
                 v-if="state.dueIn"
                 class="whitespace-no-wrap px-2 py-1 rounded-full uppercase text-xs font-bold absolute pin-t pin-r"

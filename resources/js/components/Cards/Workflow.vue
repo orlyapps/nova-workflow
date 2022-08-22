@@ -1,7 +1,7 @@
 <template>
     <card class="px-4 py-4">
         <div class="flex mb-3 relative">
-            <h3 class="mr-3 text-base text-80 font-bold">{{ __("Current status") }}</h3>
+            <h3 class="mr-3 text-base text-80 font-bold">Aktueller Status</h3>
             <span
                 v-if="state.dueIn"
                 class="whitespace-no-wrap px-2 py-1 rounded-full uppercase text-xs font-bold absolute pin-t pin-r"
@@ -89,7 +89,7 @@
         <portal to="modals">
             <transition name="fade">
                 <modal @modal-close="handleClose" v-if="dueDateChangeModal" class-whitelist="flatpickr-calendar">
-                    <div class="bg-white rounded-lg shadow-lg overflow-hidden" style="width:500px">
+                    <div class="bg-white rounded-lg shadow-lg overflow-hidden" style="width: 500px">
                         <heading :level="2" class="border-b border-40 py-8 px-8">{{ __("Change due date") }}</heading>
                         <slot>
                             <default-field :field="{ attribute: 'due_in', name: __('Due on') }" :fullWidthContent="true">

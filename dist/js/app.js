@@ -2317,9 +2317,15 @@ var _withScopeId = function _withScopeId(n) {
 var _hoisted_1 = {
   "class": "flex mb-3 relative"
 };
-var _hoisted_2 = {
-  "class": "text-90 uppercase tracking-wide font-bold md:text-sm"
-};
+
+var _hoisted_2 = /*#__PURE__*/_withScopeId(function () {
+  return /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", {
+    "class": "text-90 uppercase tracking-wide font-bold md:text-sm"
+  }, "Aktueller Status", -1
+  /* HOISTED */
+  );
+});
+
 var _hoisted_3 = {
   "class": "flex items-center"
 };
@@ -2385,9 +2391,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     "class": "px-4 py-4 space-y-4"
   }, {
     "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", _hoisted_2, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(_ctx.__("Current status")), 1
-      /* TEXT */
-      ), _ctx.state.dueIn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
+      return [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_1, [_hoisted_2, _ctx.state.dueIn ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("span", {
         key: 0,
         "class": (0,vue__WEBPACK_IMPORTED_MODULE_0__.normalizeClass)(["whitespace-no-wrap px-2 py-1 rounded-full uppercase text-xs font-bold absolute pin-t pin-r", {
           'bg-orange-light text-orange-dark': _ctx.state.duePast === false,
