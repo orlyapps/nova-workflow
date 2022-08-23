@@ -25,7 +25,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
         }
 
         if ($user && $policyExists) {
-            $event->setBlocked(!$user->can($policyName, $object));
+            $event->setBlocked(! $user->can($policyName, $object));
         } else {
             $event->setBlocked(false);
         }
@@ -56,13 +56,15 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $to = $event->getTransition()->getTos();
         $from = $event->getTransition()->getFroms();
 
-        $logModelClass = config('workflow.log_model');
-        $log = new $logModelClass();
-        $log->fill(['from' => $from[0], 'to' => $to[0], 'transition' => $transitionName]);
-        $log->subject()->associate($object);
+        if ($from[0] != $to[0]) {
+            $logModelClass = config('workflow.log_model');
+            $log = new $logModelClass();
+            $log->fill(['from' => $from[0], 'to' => $to[0], 'transition' => $transitionName]);
+            $log->subject()->associate($object);
 
-        if (\Auth::user()) {
-            $log->causer()->associate(\Auth::user());
+            if (\Auth::user()) {
+                $log->causer()->associate(\Auth::user());
+            }
         }
 
         // Fälligkeit setzen: Heute + Due In aus Workflow Definition

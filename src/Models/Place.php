@@ -16,6 +16,8 @@ class Place
 
     public $externalColor;
 
+    public $description;
+
     public function __construct(string $label, string $name)
     {
         $this->label = $label;
@@ -37,6 +39,13 @@ class Place
     public function dueIn($dueIn)
     {
         $this->dueIn = $dueIn;
+
+        return $this;
+    }
+
+    public function description($description)
+    {
+        $this->description = $description;
 
         return $this;
     }
@@ -68,6 +77,7 @@ class Place
     {
         return [
             'title' => $this->label,
+            'description' => $this->description,
             'color' => $this->color,
             'dueIn' => $this->dueIn,
             'externalLabel' => $this->externalLabel,

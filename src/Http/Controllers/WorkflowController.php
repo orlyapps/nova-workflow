@@ -14,20 +14,21 @@ class WorkflowController
     use AuthorizesRequests;
 
     /**
-    * Display a listing of the resource.
-    *
-    * @return \Illuminate\Http\Response
-    */
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         $model = $this->getModelForResource($request->resourceName, $request->resourceId);
+
         return $this->getWorkflowForModel($model);
     }
 
     public function update(Request $request, $logId)
     {
         $request->validate([
-            'dueAt' => 'nullable|date_format:d.m.Y|after:today'
+            'dueAt' => 'nullable|date_format:d.m.Y|after:today',
         ]);
 
         $model = $this->getModelForResource($request->resourceName, $request->resourceId);
@@ -49,12 +50,14 @@ class WorkflowController
         }
         $log->save();
         $commentLog->save();
+
         return $this->getWorkflowForModel($model);
     }
 
     private function getModelForResource($resourceName, $resourceId)
     {
         $resource = Nova::resourceInstanceForKey($resourceName);
+
         return $resource->model()->newQueryWithoutScopes()->find($resourceId);
     }
 
@@ -77,7 +80,7 @@ class WorkflowController
         $placeMetadata['responsibleUsers'] = UserResource::collection($definition->users($model, $model->status));
         $placeMetadata['lastLog'] = $model->lastLog;
         $placeMetadata['can'] = [
-            'changeDue' => \Auth::user()->can('changeDue', $model)
+            'changeDue' => \Auth::user()->can('changeDue', $model),
         ];
 
         if ($model->dueIn) {
@@ -95,7 +98,7 @@ class WorkflowController
             $transitionName = $transition->getName();
             $metadata = $metadataStore->getTransitionMetadata($transition);
 
-            $policyName = \Str::camel('can_see_' . $transitionName);
+            $policyName = \Str::camel('can_see_'.$transitionName);
             $policyExists = false;
             if ($policy) {
                 $policyExists = method_exists($policy, $policyName);
@@ -118,7 +121,7 @@ class WorkflowController
         }
 
         return array_merge($placeMetadata, [
-            'transitions' => collect($transitions)
+            'transitions' => collect($transitions),
         ]);
     }
 }
