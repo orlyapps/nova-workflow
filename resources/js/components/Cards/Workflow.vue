@@ -65,7 +65,7 @@
 
         <div v-if="state.transitions && state.transitions.length" class="space-y-2">
             <div v-for="transition in state.transitions" :key="transition.name">
-                <DefaultButton class="w-1/2" v-if="transition.userInteraction" @click.stop.prevent="apply(transition)">{{ transition.title }}</DefaultButton>
+                <DefaultButton class="w-full" v-if="transition.userInteraction" @click.stop.prevent="apply(transition)">{{ transition.title }}</DefaultButton>
             </div>
         </div>
         <div class="action-selector hidden">
