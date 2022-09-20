@@ -16,7 +16,7 @@
                     <p class="text-sm text-gray-500 mb-3">
                         {{ state.description }}
                     </p>
-                    <Dropdown>
+                    <Dropdown v-if="state.transitions && state.transitions.length > 2">
                         <span class="sr-only">{{ __("Resource Row Dropdown") }}</span>
                         <DropdownTrigger
                             :dusk="`${resource.id.value}-control-selector`"
@@ -45,6 +45,11 @@
                             </DropdownMenu>
                         </template>
                     </Dropdown>
+                    <div v-if="state.transitions && state.transitions.length <= 2" class="flex flex-col space-y-2" style="align-items: baseline">
+                        <DefaultButton v-for="transition in state.transitions" :key="transition.name" @click.stop.prevent="apply(transition)">
+                            {{ transition.title }}
+                        </DefaultButton>
+                    </div>
                 </div>
             </div>
         </div>
@@ -92,6 +97,7 @@ export default {
     async mounted() {
         await this.reloadStatus();
         this.state.transition = [...this.state.transitions.filter((item) => item.userInteraction === true)];
+
         this.dueAt = this.state.dueAt || "";
 
         this.getActions();
@@ -124,11 +130,12 @@ export default {
                         resourceId: this.resourceId,
                         editing: true,
                         editMode: "create",
-                        display: "detail",
+                        display: "",
                     },
                 })
                 .then((response) => {
                     this.actions = response.data.actions;
+                    console.log(this.actions);
                 });
         },
         async apply(transition) {

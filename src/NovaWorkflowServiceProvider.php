@@ -23,23 +23,23 @@ class NovaWorkflowServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'nova-workflow');
+        $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'nova-workflow');
 
         $this->app->booted(function () {
             $this->routes();
         });
 
         Nova::serving(function (ServingNova $event) {
-            Nova::script('nova-workflow', __DIR__ . '/../dist/js/app.js');
-            Nova::style('nova-workflow', __DIR__ . '/../dist/css/app.css');
+            Nova::script('nova-workflow', __DIR__.'/../dist/js/app.js');
+            Nova::style('nova-workflow', __DIR__.'/../dist/css/app.css');
         });
 
         // Regiter migrations
-        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         // Publish your config
         $this->publishes([
-            __DIR__ . '/../config/config.php' => config_path('workflow.php'),
+            __DIR__.'/../config/config.php' => config_path('workflow.php'),
         ], 'config');
 
         $this->macros();
@@ -50,10 +50,23 @@ class NovaWorkflowServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../database/migrations/2017_09_28_1000001_workflow_migration.php' => database_path('migrations/' . date('Y_m_d_His', time()) . '_workflow_migration.php'),
+                __DIR__.'/../database/migrations/2017_09_28_1000001_workflow_migration.php' => database_path('migrations/'.date('Y_m_d_His', time()).'_workflow_migration.php'),
                 // you can add any number of migrations here
             ], 'migrations');
         }
+
+        // Automatically apply the package configuration
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'workflow');
+
+        $this->app->singleton('workflow', function ($app) {
+            $registry = new WorkflowRegistry();
+            foreach ($this->workflows() as $workflow) {
+                $registry->add($workflow);
+            }
+
+            return $registry;
+        });
+        app('workflow');
     }
 
     public function macros()
@@ -63,6 +76,7 @@ class NovaWorkflowServiceProvider extends ServiceProvider
                 if (in_array($resource->status, $status)) {
                     $this->exceptOnForms();
                 }
+
                 return $value;
             });
         });
@@ -74,6 +88,7 @@ class NovaWorkflowServiceProvider extends ServiceProvider
                 } else {
                     $this->exceptOnForms();
                 }
+
                 return $value;
             });
         });
@@ -85,6 +100,7 @@ class NovaWorkflowServiceProvider extends ServiceProvider
                     $this->showOnCreation = false;
                     $this->showOnUpdate = false;
                 }
+
                 return $value;
             });
         });
@@ -104,7 +120,7 @@ class NovaWorkflowServiceProvider extends ServiceProvider
         Route::middleware(['nova'])
             ->namespace('Orlyapps\NovaWorkflow\Http\Controllers')
             ->prefix('nova-vendor/nova-workflow')
-            ->group(__DIR__ . '/../routes/api.php');
+            ->group(__DIR__.'/../routes/api.php');
     }
 
     /**
@@ -114,17 +130,6 @@ class NovaWorkflowServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__ . '/../config/config.php', 'workflow');
-
-        $this->app->singleton('workflow', function ($app) {
-            $registry = new WorkflowRegistry();
-            foreach ($this->workflows() as $workflow) {
-                $registry->add($workflow);
-            }
-            return $registry;
-        });
-        app('workflow');
     }
 
     /**
@@ -136,24 +141,25 @@ class NovaWorkflowServiceProvider extends ServiceProvider
     {
         $namespace = app()->getNamespace();
         $workflows = [];
-        if (!File::isDirectory(app_path('Nova/Workflows'))) {
+        if (! File::isDirectory(app_path('Nova/Workflows'))) {
             File::makeDirectory(app_path('Nova/Workflows'), 0777, true, true);
         }
 
         foreach ((new Finder)->in(app_path('Nova/Workflows'))->files() as $workflow) {
-            $workflow = $namespace . str_replace(
+            $workflow = $namespace.str_replace(
                 ['/', '.php'],
                 ['\\', ''],
-                Str::after($workflow->getPathname(), app_path() . DIRECTORY_SEPARATOR)
+                Str::after($workflow->getPathname(), app_path().DIRECTORY_SEPARATOR)
             );
 
             if (
                 is_subclass_of($workflow, WorkflowDefinition::class) &&
-                !(new \ReflectionClass($workflow))->isAbstract()
+                ! (new \ReflectionClass($workflow))->isAbstract()
             ) {
                 $workflows[] = new $workflow();
             }
         }
+
         return $workflows;
     }
 

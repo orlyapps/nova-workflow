@@ -110,7 +110,7 @@ class WorkflowController
                 $canSee = \Auth::user()->can($policyName, $model);
             }
 
-            if ($canSee) {
+            if ($canSee && data_get($metadata, 'userInteraction', true)) {
                 $transitions[] = [
                     'name' => $transitionName,
                     'title' => $metadata['title'],

@@ -27,7 +27,7 @@ class WorkflowAction extends Action
      *
      * @var bool
      */
-    public $showOnDetail = true;
+    public $showOnDetail = false;
 
     /**
      * Indicates if this action is available on the resource index view.
@@ -64,7 +64,7 @@ class WorkflowAction extends Action
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make('transition')
+            Text::make('transition'),
         ];
     }
 }
