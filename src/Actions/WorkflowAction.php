@@ -36,6 +36,8 @@ class WorkflowAction extends Action
      */
     public $showOnIndex = false;
 
+    public $transition = null;
+
     /**
      * Perform the action on the given models.
      *
@@ -48,10 +50,10 @@ class WorkflowAction extends Action
         foreach ($models as $model) {
             try {
                 $workflow = \Workflow::get($model, \Str::lower(class_basename($model)));
-                $workflow->apply($model, request()->transition);
+                $workflow->apply($model, $this->transition ?? request()->transition);
                 $model->save();
             } catch (\Throwable $th) {
-                //throw $th;
+                throw $th;
             }
         }
     }
