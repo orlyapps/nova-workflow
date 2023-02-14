@@ -152,6 +152,7 @@ trait HasWorkflow
             'title' => $meta['title'],
             'emoji' => $meta['emoji'],
             'color' => $meta['color'],
+            'description' => $meta['description'],
             'externalLabel' => $meta['externalLabel'] ?? $meta['title'],
             'externalColor' => $meta['externalColor'] ?? $meta['color'],
         ];
