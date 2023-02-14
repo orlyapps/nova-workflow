@@ -12,6 +12,8 @@ class Place
 
     public $dueIn;
 
+    public $emoji;
+
     public $externalLabel;
 
     public $externalColor;
@@ -57,6 +59,13 @@ class Place
         return $this;
     }
 
+    public function emoji($emoji)
+    {
+        $this->emoji = $emoji;
+
+        return $this;
+    }
+
     public function externalColor($externalColor)
     {
         $this->externalColor = $externalColor;
@@ -79,6 +88,7 @@ class Place
             'title' => $this->label,
             'description' => $this->description,
             'color' => $this->color,
+            'emoji' => $this->emoji,
             'dueIn' => $this->dueIn,
             'externalLabel' => $this->externalLabel,
             'externalColor' => $this->externalColor,
