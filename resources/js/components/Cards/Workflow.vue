@@ -1,6 +1,9 @@
 <template>
     <Card class="px-4 py-4 space-y-4">
-        <div class="flex mb-3 relative" v-if="state.dueIn">
+        <div
+            class="flex mb-3 relative"
+            v-if="state.dueIn"
+        >
             <span
                 class="whitespace-no-wrap px-2 py-1 rounded-full uppercase text-xs font-bold absolute pin-t pin-r"
                 :class="{ 'bg-orange-light text-orange-dark': state.duePast === false, 'bg-red-light text-red-dark': state.duePast === true }"
@@ -9,7 +12,11 @@
             </span>
         </div>
         <div class="flex items-start">
-            <div class="rounded-full mr-3 mt-1" style="height: 20px; width: 23px" :class="'bg-' + state.color"></div>
+            <div
+                class="rounded-full mr-3 mt-1"
+                style="height: 20px; width: 23px"
+                :class="'bg-' + state.color"
+            ></div>
             <div class="flex justify-between w-full">
                 <div>
                     <h2 class="text-xl font-bold">{{ state.title }}</h2>
@@ -27,9 +34,19 @@
                         </DropdownTrigger>
 
                         <template #menu>
-                            <DropdownMenu width="auto" class="px-1">
-                                <ScrollWrap :height="250" class="divide-y divide-gray-100 dark:divide-gray-800 divide-solid">
-                                    <div v-if="state.transitions && state.transitions.length" :dusk="`${resource.id.value}-inline-actions`" class="py-1">
+                            <DropdownMenu
+                                width="auto"
+                                class="px-1"
+                            >
+                                <ScrollWrap
+                                    :height="250"
+                                    class="divide-y divide-gray-100 dark:divide-gray-800 divide-solid"
+                                >
+                                    <div
+                                        v-if="state.transitions && state.transitions.length"
+                                        :dusk="`${resource.id.value}-inline-actions`"
+                                        class="py-1"
+                                    >
                                         <!-- User Actions -->
                                         <DropdownMenuItem
                                             as="button"
@@ -45,8 +62,16 @@
                             </DropdownMenu>
                         </template>
                     </Dropdown>
-                    <div v-if="state.transitions && state.transitions.length <= 2" class="flex flex-col space-y-2" style="align-items: baseline">
-                        <DefaultButton v-for="transition in state.transitions" :key="transition.name" @click.stop.prevent="apply(transition)">
+                    <div
+                        v-if="state.transitions && state.transitions.length <= 2"
+                        class="flex flex-col space-y-2"
+                        style="align-items: baseline"
+                    >
+                        <DefaultButton
+                            v-for="transition in state.transitions"
+                            :key="transition.name"
+                            @click.stop.prevent="apply(transition)"
+                        >
                             {{ transition.title }}
                         </DefaultButton>
                     </div>
@@ -57,7 +82,10 @@
         <div v-if="state && state.responsibleUsers.length !== 0">
             <h3 class="uppercase tracking-wide font-bold">{{ __("Responsibility") }}</h3>
             <h5 class="font-light">
-                <span v-for="user in state.responsibleUsers" :key="user.id">
+                <span
+                    v-for="user in state.responsibleUsers"
+                    :key="user.id"
+                >
                     <router-link
                         :to="{
                             name: 'detail',
@@ -75,7 +103,14 @@
         </div>
 
         <div class="action-selector hidden">
-            <DetailActionDropdown ref="actionSelector" :resource="resource" :resource-name="resourceName" :actions="actions" :endpoint="actionsEndpoint" :query-string="{}" />
+            <DetailActionDropdown
+                ref="actionSelector"
+                :resource="resource"
+                :resource-name="resourceName"
+                :actions="actions"
+                :endpoint="actionsEndpoint"
+                :query-string="{}"
+            />
         </div>
     </Card>
 </template>
@@ -116,7 +151,9 @@ export default {
              */
             this.$refs.actionSelector.handleActionResponse = async (data, headers) => {
                 this.originalHandler(data, headers);
-                Inertia.reload();
+                if (!data.visit) {
+                    Inertia.reload();
+                }
             };
         },
         /**
