@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Actions\Action;
 use Laravel\Nova\Fields\ActionFields;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class WorkflowAction extends Action
 {
@@ -35,6 +36,8 @@ class WorkflowAction extends Action
      */
     public $showOnIndex = false;
 
+    public $transition = null;
+
     /**
      * Perform the action on the given models.
      *
@@ -47,12 +50,11 @@ class WorkflowAction extends Action
         foreach ($models as $model) {
             try {
                 $workflow = \Workflow::get($model, \Str::lower(class_basename($model)));
-                $workflow->apply($model, request()->transition);
+                $workflow->apply($model, $this->transition ?? request()->transition);
                 $model->save();
             } catch (\Throwable $th) {
-                //throw $th;
+                throw $th;
             }
-           
         }
     }
 
@@ -61,10 +63,10 @@ class WorkflowAction extends Action
      *
      * @return array
      */
-    public function fields()
+    public function fields(NovaRequest $request)
     {
         return [
-            Text::make('transition')
+            Text::make('transition'),
         ];
     }
 }

@@ -25,7 +25,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
         }
 
         if ($user && $policyExists) {
-            $event->setBlocked(!$user->can($policyName, $object));
+            $event->setBlocked(! $user->can($policyName, $object));
         } else {
             $event->setBlocked(false);
         }
@@ -56,29 +56,27 @@ class WorkflowSubscriber implements EventSubscriberInterface
         $to = $event->getTransition()->getTos();
         $from = $event->getTransition()->getFroms();
 
-        $logModelClass = config('workflow.log_model');
-        $log = new $logModelClass();
-        $log->fill(['from' => $from[0], 'to' => $to[0], 'transition' => $transitionName]);
-        $log->subject()->associate($object);
+        if ($from[0] != $to[0]) {
+            $logModelClass = config('workflow.log_model');
+            $log = new $logModelClass();
+            $log->fill(['from' => $from[0], 'to' => $to[0], 'transition' => $transitionName]);
+            $log->subject()->associate($object);
 
-        if (\Auth::user()) {
-            $log->causer()->associate(\Auth::user());
+            if (\Auth::user()) {
+                $log->causer()->associate(\Auth::user());
+            }
+            $log->save();
+            event('nova-workflow.entered', $log);
+            event(sprintf('nova-workflow.%s.entered', $workflowName), $log);
         }
 
-        // Fälligkeit setzen: Heute + Due In aus Workflow Definition
         $place = $definition->place($to[0]);
         if ($place->dueIn) {
             $log->due_at = (new \DateTime())->add(\DateInterval::createFromDateString($place->dueIn));
         }
-        // only save when a place change
-        if (optional($object->lastLog)->to !== $to[0]) {
-            $log->save();
-            event('nova-workflow.entered', $log);
-            event(sprintf('nova-workflow.%s.entered', $workflowName), $log);
-            // Observer Events werden aufgerufen
-            $method = \Str::camel($transitionName);
-            $object->fire($method);
-        }
+
+        $method = \Str::camel($transitionName);
+        $object->fire($method);
     }
 
     public function completedEvent(Event $event)
@@ -95,7 +93,6 @@ class WorkflowSubscriber implements EventSubscriberInterface
     {
         return [
             'workflow.guard' => ['guardEvent'],
-
             'workflow.entered' => ['enteredEvent'],
         ];
     }

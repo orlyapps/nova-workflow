@@ -14,7 +14,7 @@ class StatusFilter extends Filter
      */
     public $name = 'Status';
 
-
+    public $defaultStatus = '';
 
     /**
      * The filter's component.
@@ -23,7 +23,7 @@ class StatusFilter extends Filter
      */
     public $component = 'select-filter';
 
-    public function __construct(public $resource, public $whereField = "status")
+    public function __construct(public $resource, public $whereField = 'status')
     {
     }
 
@@ -38,6 +38,23 @@ class StatusFilter extends Filter
     public function apply(Request $request, $query, $value)
     {
         return $query->where($this->whereField, $value);
+    }
+
+    public function defaultStatus($status)
+    {
+        $this->defaultStatus = $status;
+
+        return $this;
+    }
+
+    /**
+     * Set the default options for the filter.
+     *
+     * @return array|mixed
+     */
+    public function default()
+    {
+        return $this->defaultStatus;
     }
 
     /**

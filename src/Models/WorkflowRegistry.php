@@ -138,7 +138,7 @@ class WorkflowRegistry
 
         $definition = $builder->build();
         $markingStore = new MethodMarkingStore(true, config('workflow.marking_store_field'));
-        $workflowObj = new Workflow($definition, $markingStore, $this->dispatcher, $workflow->name);
+        $workflowObj = new Workflow($definition, $markingStore, $this->dispatcher, \Str::lower($workflow->name));
 
         foreach ($workflow->supports as $supportedClass) {
             $supportStrategy = $workflow->supportStrategy();

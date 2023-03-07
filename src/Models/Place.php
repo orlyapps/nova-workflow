@@ -12,9 +12,13 @@ class Place
 
     public $dueIn;
 
+    public $emoji;
+
     public $externalLabel;
 
     public $externalColor;
+
+    public $description;
 
     public function __construct(string $label, string $name)
     {
@@ -41,9 +45,23 @@ class Place
         return $this;
     }
 
+    public function description($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
     public function color($color)
     {
         $this->color = $color;
+
+        return $this;
+    }
+
+    public function emoji($emoji)
+    {
+        $this->emoji = $emoji;
 
         return $this;
     }
@@ -68,7 +86,9 @@ class Place
     {
         return [
             'title' => $this->label,
+            'description' => $this->description,
             'color' => $this->color,
+            'emoji' => $this->emoji,
             'dueIn' => $this->dueIn,
             'externalLabel' => $this->externalLabel,
             'externalColor' => $this->externalColor,

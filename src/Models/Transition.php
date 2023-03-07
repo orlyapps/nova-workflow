@@ -7,8 +7,11 @@ use Orlyapps\NovaWorkflow\Actions\WorkflowAction;
 class Transition
 {
     public $from = [];
+
     public $to = [];
+
     public $action;
+
     public $entered;
 
     protected $userInteraction = true;
@@ -25,27 +28,38 @@ class Transition
         return new static($label,$name);
     }
 
+    public function description($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
     public function from($place)
     {
         $this->from = $place;
+
         return $this;
     }
 
     public function to($place)
     {
         $this->to = $place;
+
         return $this;
     }
 
     public function action($action)
     {
         $this->action = $action->uriKey();
+
         return $this;
     }
 
     public function noUserInteraction()
     {
         $this->userInteraction = false;
+
         return $this;
     }
 
@@ -61,7 +75,7 @@ class Transition
                 'from' => $this->from,
                 'to' => $this->to,
                 'metadata' => $this->metadata(),
-            ]
+            ],
         ];
     }
 
@@ -70,7 +84,7 @@ class Transition
         return [
             'title' => $this->label,
             'action' => $this->action,
-            'userInteraction' => $this->userInteraction
+            'userInteraction' => $this->userInteraction,
         ];
     }
 }

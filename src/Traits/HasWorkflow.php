@@ -25,6 +25,7 @@ trait HasWorkflow
         $observables = collect($definition->transitions())->map(function ($transition) {
             return \Str::camel($transition->name);
         });
+
         return array_merge(
             array_merge($this->observables, parent::getObservableEvents()),
             $observables->toArray()
@@ -75,6 +76,7 @@ trait HasWorkflow
         foreach ($definition->places() as $place) {
             $status[$place->name] = $place->color;
         }
+
         return $status;
     }
 
@@ -88,6 +90,7 @@ trait HasWorkflow
         foreach ($definition->places() as $place) {
             $status[$place->name] = $place->label;
         }
+
         return $status;
     }
 
@@ -98,8 +101,9 @@ trait HasWorkflow
 
         $colors = [];
         foreach ($definition->places() as $place) {
-            $colors[$place->label] = 'var(--' . $place->color . ')';
+            $colors[$place->label] = 'var(--'.$place->color.')';
         }
+
         return $colors;
     }
 
@@ -146,7 +150,9 @@ trait HasWorkflow
         return [
             'name' => $place,
             'title' => $meta['title'],
+            'emoji' => $meta['emoji'],
             'color' => $meta['color'],
+            'description' => $meta['description'],
             'externalLabel' => $meta['externalLabel'] ?? $meta['title'],
             'externalColor' => $meta['externalColor'] ?? $meta['color'],
         ];
@@ -164,7 +170,7 @@ trait HasWorkflow
             $transitionName = $transition->getName();
             $metadata = $metadataStore->getTransitionMetadata($transition);
 
-            $policyName = \Str::camel('can_see_' . $transitionName);
+            $policyName = \Str::camel('can_see_'.$transitionName);
             $policyExists = false;
             if ($policy) {
                 $policyExists = method_exists($policy, $policyName);
@@ -197,12 +203,14 @@ trait HasWorkflow
     {
         $reflection = new \ReflectionClass($this);
         $definition = \Workflow::getDefinitionForClass($reflection->getName());
+
         return $definition;
     }
 
     public function getWorkflowMetadataForStatus()
     {
         $definition = $this->getWorkflowDefinition();
+
         return $definition->place($this->status)->metadata();
     }
 
