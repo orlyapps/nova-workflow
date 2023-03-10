@@ -68,15 +68,19 @@ class WorkflowDefinition
         );
     }
     
+
     public function transistionsOptionArray()
     {
-        return $this->toArray()['transitions']->mapWithKeys(
-            function ($place) {
-                return [array_key_first($place) => head($place)['metadata']['title']];
-            }
-        );
+        return $this->toArray()['transitions']
+            ->mapWithKeys(
+                function ($place) {
+                    if (head($place)['metadata']['action'] == 'workflow-status-change') {
+                        return [array_key_first($place) => head($place)['metadata']['title']];
+                    }
+                    return [];
+                }
+            );
     }
-
 
     public function place($placeName)
     {
