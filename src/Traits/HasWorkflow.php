@@ -233,4 +233,17 @@ trait HasWorkflow
     {
         return config('workflow.log_model')::forSubject($this)->whereNotNull('comment')->orderByDesc('created_at')->first();
     }
+
+    public function getTransitionForAction(\Laravel\Nova\Actions\Action $action)
+    {
+        $transitions = $this->getTransitions();
+
+        foreach ($transitions as $transition) {
+            if ($transition['action'] == $action->uriKey()) {
+                return $transition['name'];
+            }
+        }
+
+        return null;
+    }
 }

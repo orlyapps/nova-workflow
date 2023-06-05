@@ -50,23 +50,11 @@ class WorkflowAction extends Action
         foreach ($models as $model) {
             try {
                 $workflow = \Workflow::get($model, \Str::lower(class_basename($model)));
-                $workflow->apply($model, $this->transition ?? request()->transition);
+                $workflow->apply($model, $model->getTransitionForAction($this) ?? $fields->transition);
                 $model->save();
             } catch (\Throwable $th) {
                 throw $th;
             }
         }
-    }
-
-    /**
-     * Get the fields available on the action.
-     *
-     * @return array
-     */
-    public function fields(NovaRequest $request)
-    {
-        return [
-            Text::make('transition'),
-        ];
     }
 }

@@ -103,62 +103,35 @@
         </div>
 
         <div class="action-selector hidden">
-            <DetailActionDropdown
+            <ActionDropdown
                 ref="actionSelector"
                 :resource="resource"
-                :resource-name="resourceName"
                 :actions="actions"
-                :endpoint="actionsEndpoint"
-                :query-string="{}"
-            />
+                :resource-name="resourceName"
+                @actionExecuted="$emit('actionExecuted')"
+                :selected-resources="[resource.id.value]"
+            ></ActionDropdown>
         </div>
     </Card>
 </template>
 
 <script>
-import tap from "lodash/tap";
-import each from "lodash/each";
-import { Inertia } from "@inertiajs/inertia";
 export default {
     props: ["card", "resource", "resourceId", "resourceName"],
     data: () => ({
         state: 0,
         actions: [],
-        executing: false,
-        dueDateChangeModal: false,
-        dueAt: "",
-        originalHandler: null,
     }),
     async mounted() {
         await this.reloadStatus();
         this.state.transition = [...this.state.transitions.filter((item) => item.userInteraction === true)];
 
-        this.dueAt = this.state.dueAt || "";
-
+        Nova.$on("action-executed", () => {
+            this.reloadStatus();
+        });
         this.getActions();
-
-        this.originalHandler = this.$refs.actionSelector.handleActionResponse;
-
-        this.overwriteActionHandler();
     },
     methods: {
-        overwriteActionHandler() {
-            if (!this.$refs.actionSelector) {
-                return;
-            }
-            /**
-             * Overwrites the nova response handler
-             */
-            this.$refs.actionSelector.handleActionResponse = async (data, headers) => {
-                this.originalHandler(data, headers);
-                if (!data.visit) {
-                    Inertia.reload();
-                }
-            };
-        },
-        /**
-         * Get the available actions for the resource.
-         */
         getActions() {
             this.actions = [];
             return Nova.request()
@@ -172,41 +145,11 @@ export default {
                 })
                 .then((response) => {
                     this.actions = response.data.actions;
-                    console.log(this.actions);
+                    this.actions.filter((i) => i.uriKey === "workflow-status-change").map((i) => (i.withoutConfirmation = true));
                 });
         },
-        async apply(transition) {
-            /**
-             * Disable Confirmation on all default workflow action
-             */
-            console.log(this.$refs.actionSelector.availableActions);
-            this.$refs.actionSelector.actions.filter((i) => i.uriKey === "workflow-status-change").map((i) => (i.withoutConfirmation = true));
-
-            this.$refs.actionSelector.selectedActionKey = transition.action;
-
-            /**
-             * Removes the 'hidden' transition field so nothing is shown to the end user
-             */
-            this.$refs.actionSelector.selectedAction.fields = this.$refs.actionSelector.selectedAction.fields.filter((i) => i.name !== "transition");
-
-            /**
-             * Inject the 'transition' parameter in the handle request
-             */
-            this.$refs.actionSelector.actionFormData = () => {
-                return tap(new FormData(), (formData) => {
-                    formData.append("resources", this.$refs.actionSelector.selectedResources);
-                    formData.append("transition", transition.name);
-
-                    each(this.$refs.actionSelector.selectedAction.fields, (field) => {
-                        field.fill(formData);
-                    });
-                });
-            };
-
-            /**
-             * Open the Action modal or call the nova api directly
-             */
-            this.$refs.actionSelector.determineActionStrategy();
+        apply(transition) {
+            document.querySelector('[data-action-id="' + transition.action + '"]').click();
         },
         async reloadStatus() {
             this.state = (await Nova.request().get(`/nova-vendor/nova-workflow/workflow?resourceName=${this.resourceName}&resourceId=${this.resourceId}`)).data;
