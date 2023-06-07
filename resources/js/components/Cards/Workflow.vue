@@ -116,6 +116,7 @@
 </template>
 
 <script>
+import { Inertia } from "@inertiajs/inertia";
 export default {
     props: ["card", "resource", "resourceId", "resourceName"],
     data: () => ({
@@ -127,7 +128,7 @@ export default {
         this.state.transition = [...this.state.transitions.filter((item) => item.userInteraction === true)];
 
         Nova.$on("action-executed", () => {
-            this.reloadStatus();
+            Inertia.reload();
         });
         this.getActions();
     },
