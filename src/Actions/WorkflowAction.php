@@ -47,10 +47,15 @@ class WorkflowAction extends Action
      */
     public function handle(ActionFields $fields, Collection $models)
     {
+        $refererUrl = request()->headers->get('referer');
+        $refererParams = parse_url($refererUrl, PHP_URL_QUERY);
+        parse_str($refererParams, $params);
+        $this->transition = data_get($params, 'transition');
+
         foreach ($models as $model) {
             try {
                 $workflow = \Workflow::get($model, \Str::lower(class_basename($model)));
-                $workflow->apply($model, $model->getTransitionForAction($this) ?? $fields->transition);
+                $workflow->apply($model, $this->transition ?? $model->getTransitionForAction($this));
                 $model->save();
             } catch (\Throwable $th) {
                 throw $th;

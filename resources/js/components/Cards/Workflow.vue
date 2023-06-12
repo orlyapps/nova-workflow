@@ -68,6 +68,7 @@
                         style="align-items: baseline"
                     >
                         <DefaultButton
+                            :disabled="loading"
                             v-for="transition in state.transitions"
                             :key="transition.name"
                             @click.stop.prevent="apply(transition)"
@@ -121,6 +122,7 @@ export default {
     props: ["card", "resource", "resourceId", "resourceName"],
     data: () => ({
         state: 0,
+        loading: false,
         actions: [],
     }),
     async mounted() {
@@ -146,11 +148,25 @@ export default {
                 })
                 .then((response) => {
                     this.actions = response.data.actions;
-                    this.actions.filter((i) => i.uriKey === "workflow-status-change").map((i) => (i.withoutConfirmation = true));
+
+                    this.actions
+                        .filter((i) => i.uriKey === "workflow-status-change")
+                        .map((i) => {
+                            i.withoutConfirmation = true;
+
+                            return i;
+                        });
                 });
         },
         apply(transition) {
-            document.querySelector('[data-action-id="' + transition.action + '"]').click();
+            this.loading = true;
+
+            const query = new URLSearchParams(window.location.search);
+            query.set("transition", transition.name);
+            const newUrl = `${window.location.origin}${window.location.pathname}?${query.toString()}`;
+            window.history.replaceState({ path: newUrl }, "", newUrl);
+
+            document.querySelector(`[data-action-id="${transition.action}"]`).click();
         },
         async reloadStatus() {
             this.state = (await Nova.request().get(`/nova-vendor/nova-workflow/workflow?resourceName=${this.resourceName}&resourceId=${this.resourceId}`)).data;
