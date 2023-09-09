@@ -67,7 +67,6 @@ class WorkflowDefinition
             }
         );
     }
-    
 
     public function transistionsOptionArray()
     {
