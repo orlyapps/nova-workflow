@@ -101,13 +101,13 @@ trait HasWorkflow
 
         $colors = [];
         foreach ($definition->places() as $place) {
-            $colors[$place->label] = 'var(--'.$place->color.')';
+            $colors[$place->label] = 'var(--' . $place->color . ')';
         }
 
         return $colors;
     }
 
-    public function logComment(User $user, $comment)
+    public function logComment($user, $comment)
     {
         $log = config('workflow.log_model')::create(['comment' => $comment]);
         $log->subject()->associate($this);
@@ -170,7 +170,7 @@ trait HasWorkflow
             $transitionName = $transition->getName();
             $metadata = $metadataStore->getTransitionMetadata($transition);
 
-            $policyName = \Str::camel('can_see_'.$transitionName);
+            $policyName = \Str::camel('can_see_' . $transitionName);
             $policyExists = false;
             if ($policy) {
                 $policyExists = method_exists($policy, $policyName);

@@ -1,117 +1,108 @@
 <template>
-    <Card class="px-4 py-4 space-y-4">
+    <Card class="px-4 py-4 relative">
         <div
-            class="flex mb-3 relative"
             v-if="state.dueIn"
+            class="whitespace-no-wrap px-2 py-1 rounded-full uppercase text-xs font-bold absolute"
+            style="top: 1rem; right: 1rem"
+            :class="{ 'bg-orange-light text-orange-dark': state.duePast === false, 'bg-red-light text-red-dark': state.duePast === true }"
         >
-            <span
-                class="whitespace-no-wrap px-2 py-1 rounded-full uppercase text-xs font-bold absolute pin-t pin-r"
-                :class="{ 'bg-orange-light text-orange-dark': state.duePast === false, 'bg-red-light text-red-dark': state.duePast === true }"
-            >
-                {{ __("Due") }} {{ state.dueIn }}
-            </span>
+            {{ __("Due") }} {{ state.dueIn }}
         </div>
-        <div class="flex items-start">
-            <div
-                class="rounded-full mr-3 mt-1"
-                style="height: 20px; width: 23px"
-                :class="'bg-' + state.color"
-            ></div>
-            <div class="flex justify-between w-full">
-                <div>
-                    <h2 class="text-xl font-bold">{{ state.title }}</h2>
-                    <p class="text-sm text-gray-500 mb-3">
-                        {{ state.description }}
-                    </p>
-                    <Dropdown v-if="state.transitions && state.transitions.length > 2">
-                        <span class="sr-only">{{ __("Resource Row Dropdown") }}</span>
-                        <DropdownTrigger
-                            :dusk="`${resource.id.value}-control-selector`"
-                            :show-arrow="false"
-                            class="rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none focus:ring"
-                        >
-                            <OutlineButton component="span">Status wechseln</OutlineButton>
-                        </DropdownTrigger>
-
-                        <template #menu>
-                            <DropdownMenu
-                                width="auto"
-                                class="px-1"
+        <div class="space-y-4">
+            <div class="flex items-start">
+                <div
+                    class="rounded-full mr-3 mt-1"
+                    style="height: 20px; width: 23px"
+                    :class="'bg-' + state.color"
+                ></div>
+                <div class="flex justify-between w-full">
+                    <div>
+                        <h2 class="text-xl font-bold">{{ state.title }}</h2>
+                        <p class="text-sm text-gray-500 mb-3">
+                            {{ state.description }}
+                        </p>
+                        <Dropdown v-if="state.transitions && state.transitions.length > 2">
+                            <span class="sr-only">{{ __("Resource Row Dropdown") }}</span>
+                            <DropdownTrigger
+                                :dusk="`${resource.id.value}-control-selector`"
+                                :show-arrow="false"
+                                class="rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none focus:ring"
                             >
-                                <ScrollWrap
-                                    :height="250"
-                                    class="divide-y divide-gray-100 dark:divide-gray-800 divide-solid"
+                                <OutlineButton component="span">Status wechseln</OutlineButton>
+                            </DropdownTrigger>
+
+                            <template #menu>
+                                <DropdownMenu
+                                    width="auto"
+                                    class="px-1"
                                 >
-                                    <div
-                                        v-if="state.transitions && state.transitions.length"
-                                        :dusk="`${resource.id.value}-inline-actions`"
-                                        class="py-1"
+                                    <ScrollWrap
+                                        :height="250"
+                                        class="divide-y divide-gray-100 dark:divide-gray-800 divide-solid"
                                     >
-                                        <!-- User Actions -->
-                                        <DropdownMenuItem
-                                            as="button"
-                                            v-for="transition in state.transitions"
-                                            :key="transition.name"
-                                            @click.stop.prevent="apply(transition)"
-                                            :title="transition.title"
+                                        <div
+                                            v-if="state.transitions && state.transitions.length"
+                                            :dusk="`${resource.id.value}-inline-actions`"
+                                            class="py-1"
                                         >
-                                            {{ transition.title }}
-                                        </DropdownMenuItem>
-                                    </div>
-                                </ScrollWrap>
-                            </DropdownMenu>
-                        </template>
-                    </Dropdown>
-                    <div
-                        v-if="state.transitions && state.transitions.length <= 2"
-                        class="flex flex-col space-y-2"
-                        style="align-items: baseline"
-                    >
-                        <DefaultButton
-                            :disabled="loading"
-                            v-for="transition in state.transitions"
-                            :key="transition.name"
-                            @click.stop.prevent="apply(transition)"
+                                            <!-- User Actions -->
+                                            <DropdownMenuItem
+                                                as="button"
+                                                v-for="transition in state.transitions"
+                                                :key="transition.name"
+                                                @click.stop.prevent="apply(transition)"
+                                                :title="transition.title"
+                                            >
+                                                {{ transition.title }}
+                                            </DropdownMenuItem>
+                                        </div>
+                                    </ScrollWrap>
+                                </DropdownMenu>
+                            </template>
+                        </Dropdown>
+                        <div
+                            v-if="state.transitions && state.transitions.length <= 2"
+                            class="flex flex-col space-y-2"
+                            style="align-items: baseline"
                         >
-                            {{ transition.title }}
-                        </DefaultButton>
+                            <DefaultButton
+                                :disabled="loading"
+                                v-for="transition in state.transitions"
+                                :key="transition.name"
+                                @click.stop.prevent="apply(transition)"
+                            >
+                                {{ transition.title }}
+                            </DefaultButton>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div v-if="state && state.responsibleUsers.length !== 0">
-            <h3 class="uppercase tracking-wide font-bold">{{ __("Responsibility") }}</h3>
-            <h5 class="font-light">
-                <span
-                    v-for="user in state.responsibleUsers"
-                    :key="user.id"
-                >
-                    <router-link
-                        :to="{
-                            name: 'detail',
-                            params: {
-                                resourceName: user.resourceName,
-                                resourceId: user.id,
-                            },
-                        }"
+            <div v-if="state && state.responsibleUsers.length !== 0">
+                <h3 class="uppercase tracking-wide text-gray-500 text-sm font-bold">{{ __("Responsibility") }}</h3>
+                <h5 class="font-light flex space-x-3">
+                    <Link
+                        v-for="user in state.responsibleUsers"
+                        :key="user.id"
+                        @click.stop
+                        :href="$url(`/resources/${user.resourceName}/${user.id}`)"
+                        class="link-default"
                     >
                         {{ user.name }}
-                    </router-link>
-                    ,&nbsp;
-                </span>
-            </h5>
-        </div>
+                    </Link>
+                </h5>
+            </div>
 
-        <div class="action-selector hidden">
-            <ActionDropdown
-                ref="actionSelector"
-                :resource="resource"
-                :actions="actions"
-                :resource-name="resourceName"
-                @actionExecuted="$emit('actionExecuted')"
-                :selected-resources="[resource.id.value]"
-            ></ActionDropdown>
+            <div class="action-selector ">
+                <ActionDropdown
+                    ref="actionSelector"
+                    :resource="resource"
+                    :actions="actions"
+                    :resource-name="resourceName"
+                    @actionExecuted="$emit('actionExecuted')"
+                    :selected-resources="[resource.id.value]"
+                ></ActionDropdown>
+            </div>
         </div>
     </Card>
 </template>
