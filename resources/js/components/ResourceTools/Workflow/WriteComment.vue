@@ -1,22 +1,20 @@
 <template>
     <div class="item flex items-center">
-        <div class="card w-full px-4 py-4">
+        <Card class="card w-full px-4 py-4">
             <textarea
                 id="notes"
                 v-model="comment"
                 dusk="notes"
                 rows="5"
-                class="w-full form-control form-input form-input-bordered py-3 h-auto"
+                class="block w-full form-control form-input form-input-bordered py-3 h-auto mb-3"
             ></textarea>
-            <button
+
+            <DefaultButton
                 :disabled="comment.length <= 10"
                 @click.prevent.stop="onSend"
-                class="btn btn-default btn-primary inline-flex items-center relative"
-                dusk="update-button"
-            >
-                <span class>{{ __('Submit comment') }}</span>
-            </button>
-        </div>
+                dusk="update-button">{{ __('Submit comment') }}</DefaultButton>
+
+        </Card>
     </div>
 </template>
 

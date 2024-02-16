@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4 class="text-90 font-normal text-2xl mb-3">{{ __("Activities") }}</h4>
+        <h4 class="font-normal text-2xl mb-3">{{ __("Activities") }}</h4>
         <div class="timeline w-full">
             <workflow-write-comment @submit="onWriteComment"></workflow-write-comment>
             <workflow-status v-for="activity in activities" :key="activity.id" :activity="activity"></workflow-status>
@@ -10,6 +10,7 @@
 
 <script>
 export default {
+
     props: ["resourceName", "resourceId", "field"],
     data: () => {
         return {
@@ -17,6 +18,7 @@ export default {
         };
     },
     async mounted() {
+
         this.fetch();
         Nova.$on("workflow-updated", () => {
             this.fetch();
@@ -28,11 +30,12 @@ export default {
     methods: {
         async onWriteComment(comment) {
             const activity = (await Nova.request().post(`/nova-vendor/nova-workflow/logs?resourceName=${this.resourceName}&resourceId=${this.resourceId}`, { comment })).data;
-            this.$toasted.show("Kommentar erfolgreich gespeichert", { type: "success" });
+            Nova.success("Kommentar erfolgreich gespeichert")
             this.activities.unshift(activity);
         },
         async fetch() {
             this.activities = (await Nova.request().get(`/nova-vendor/nova-workflow/logs?resourceName=${this.resourceName}&resourceId=${this.resourceId}`)).data.data;
+
         },
     },
 };

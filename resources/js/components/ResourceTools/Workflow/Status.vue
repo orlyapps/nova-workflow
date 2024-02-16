@@ -1,9 +1,9 @@
 <template>
     <div class="item flex items-center">
-        <div class="card w-full px-4 py-4">
-            <div class="flex justify-between text-sm text-80 mb-3">
+        <Card class="px-4 py-4 w-full">
+            <div class="flex justify-between text-sm text-gray-800 mb-3">
                 <h4>{{ activity.user.fullname }}</h4>
-                <span class="uppercase tracking-wide">{{ activity.created_at }}</span>
+                <span class="uppercase tracking-wide text-gray-500">{{ activity.created_at }}</span>
             </div>
             <div class="flex items-center" v-if="activity.data">
                 <span class="w-4 h-4 block rounded-full mr-3" :class="'bg-' + activity.data.status.color"></span>
@@ -13,7 +13,7 @@
                 </div>
             </div>
             <p>{{ activity.comment }}</p>
-        </div>
+        </Card>
     </div>
 </template>
 

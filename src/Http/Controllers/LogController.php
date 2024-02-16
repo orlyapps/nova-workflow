@@ -18,7 +18,6 @@ class LogController
         $model = $this->getModelForResource($request->resourceName, $request->resourceId);
 
         $activities = config('workflow.log_model')::forSubject($model)->orderBy('created_at', 'desc')->get();
-
         return ActivityResource::collection($activities);
     }
 
@@ -31,7 +30,6 @@ class LogController
     public function store(Request $request)
     {
         $model = $this->getModelForResource($request->resourceName, $request->resourceId);
-        \Gate::authorize('update', $model);
 
         $log = config('workflow.log_model')::create($request->only(['comment']));
         $log->subject()->associate($model);
