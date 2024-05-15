@@ -71,7 +71,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
         }
 
         $place = $definition->place($to[0]);
-        if ($log && $place->dueIn) {
+        if (isset($log) && $place->dueIn) {
             $log->due_at = (new \DateTime())->add(\DateInterval::createFromDateString($place->dueIn));
         }
 
