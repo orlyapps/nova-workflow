@@ -8,11 +8,11 @@
             <div class="flex items-center" v-if="activity.data">
                 <span class="w-4 h-4 block rounded-full mr-3" :class="'bg-' + activity.data.status.color"></span>
                 <div>
-                    <h5 class="font-light" v-if="activity.data.transition">{{ activity.data.transition.title }}</h5>
-                    <h3>{{ activity.data.status.title }}</h3>
+                    <h5 class="font-light text-gray-800" v-if="activity.data.transition">{{ activity.data.transition.title }}</h5>
+                    <h3 class="text-gray-800">{{ activity.data.status.title }}</h3>
                 </div>
             </div>
-            <p>{{ activity.comment }}</p>
+            <p class="text-gray-800">{{ activity.comment }}</p>
         </Card>
     </div>
 </template>
