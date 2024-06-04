@@ -18,17 +18,17 @@ class WorkflowRegistry
     /**
      * @var Registry
      */
-    protected $registry;
+    public $registry;
 
     /**
      * @var EventDispatcher
      */
-    protected $dispatcher;
+    public $dispatcher;
 
     /**
      * @var array
      */
-    protected $definitions = [];
+    public $definitions = [];
 
     /**
      * WorkflowRegistry constructor
