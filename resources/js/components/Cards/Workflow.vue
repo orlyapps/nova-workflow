@@ -158,6 +158,9 @@ export default {
             window.history.replaceState({ path: newUrl }, "", newUrl);
 
             document.querySelector(`[data-action-id="${transition.action}"]`).click();
+            setTimeout(() => {
+                 this.loading = false;
+            }, 500);
         },
         async reloadStatus() {
             this.state = (await Nova.request().get(`/nova-vendor/nova-workflow/workflow?resourceName=${this.resourceName}&resourceId=${this.resourceId}`)).data;
