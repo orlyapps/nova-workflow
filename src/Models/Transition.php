@@ -7,9 +7,16 @@ use Orlyapps\NovaWorkflow\Actions\WorkflowAction;
 class Transition
 {
     public $from = [];
+    
     public $to = [];
+    
     public $action;
+    
     public $entered;
+    
+    public $label;
+
+    public $name;
 
     protected $userInteraction = true;
 
