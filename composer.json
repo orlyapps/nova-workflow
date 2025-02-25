@@ -9,9 +9,8 @@
     "require": {
         "php": "^8.0 | ^8.1",
         "illuminate/support": "8.* || 9.* || 10.* || 11.*",
-        "spatie/laravel-ray": "^1.32",
-        "symfony/event-dispatcher": "^5.0",
-        "symfony/workflow": "^5.0"
+        "symfony/event-dispatcher": "^7.0",
+        "symfony/workflow": "^7.0"
     },
     "autoload": {
         "psr-4": {
