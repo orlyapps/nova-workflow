@@ -23,7 +23,7 @@
                         </p>
 
                         <Dropdown v-if="state.transitions && state.transitions.length > 2">
-                            <OutlineButton>Status wechseln</OutlineButton>
+                            <Button>Status wechseln</Button>
 
                             <template #menu>
                                 <DropdownMenu
@@ -59,14 +59,14 @@
                             class="flex flex-col space-y-2"
                             style="align-items: baseline"
                         >
-                            <DefaultButton
+                            <Button
                                 :disabled="loading"
                                 v-for="transition in state.transitions"
                                 :key="transition.name"
                                 @click.stop.prevent="apply(transition)"
                             >
                                 {{ transition.title }}
-                            </DefaultButton>
+                            </Button>
                         </div>
                     </div>
                 </div>
@@ -104,7 +104,11 @@
 
 <script>
 import { Inertia } from "@inertiajs/inertia";
+import { Button } from "laravel-nova-ui";
 export default {
+    components: {
+        Button,
+    },
     props: ["card", "resource", "resourceId", "resourceName"],
     data: () => ({
         state: 0,

@@ -19,5 +19,8 @@
         "sass-loader": "^12.6.0",
         "vue": "^3.2.31",
         "vue-loader": "^16.8.3"
+    },
+    "dependencies": {
+        "laravel-nova-ui": "^0.4.12"
     }
 }
