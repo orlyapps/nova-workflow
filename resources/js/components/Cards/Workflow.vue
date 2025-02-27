@@ -21,20 +21,14 @@
                         <p class="text-sm text-gray-500 mb-3">
                             {{ state.description }}
                         </p>
+
                         <Dropdown v-if="state.transitions && state.transitions.length > 2">
-                            <span class="sr-only">{{ __("Resource Row Dropdown") }}</span>
-                            <DropdownTrigger
-                                :dusk="`${resource.id.value}-control-selector`"
-                                :show-arrow="false"
-                                class="rounded hover:bg-gray-200 dark:hover:bg-gray-800 focus:outline-none focus:ring"
-                            >
-                                <OutlineButton component="span">Status wechseln</OutlineButton>
-                            </DropdownTrigger>
+                            <OutlineButton>Status wechseln</OutlineButton>
 
                             <template #menu>
                                 <DropdownMenu
                                     width="auto"
-                                    class="px-1"
+                                    class="px-1 mt-1"
                                 >
                                     <ScrollWrap
                                         :height="250"
@@ -93,13 +87,14 @@
                 </h5>
             </div>
 
-            <div class="action-selector ">
+            <div class="action-selector">
                 <ActionDropdown
                     ref="actionSelector"
                     :resource="resource"
                     :actions="actions"
                     :resource-name="resourceName"
                     @actionExecuted="$emit('actionExecuted')"
+                    triggerDuskAttribute="workflow-action-dropdown"
                     :selected-resources="[resource.id.value]"
                 ></ActionDropdown>
             </div>
@@ -157,10 +152,16 @@ export default {
             const newUrl = `${window.location.origin}${window.location.pathname}?${query.toString()}`;
             window.history.replaceState({ path: newUrl }, "", newUrl);
 
-            document.querySelector(`[data-action-id="${transition.action}"]`).click();
+            document.querySelector('[dusk="workflow-action-dropdown"]').click();
+
             setTimeout(() => {
-                 this.loading = false;
-            }, 500);
+                document.querySelector('[dusk="dropdown-teleported"]').style.display = "none";
+                document.querySelector(`[data-action-id="${transition.action}"]`).click();
+
+                setTimeout(() => {
+                    this.loading = false;
+                }, 500);
+            });
         },
         async reloadStatus() {
             this.state = (await Nova.request().get(`/nova-vendor/nova-workflow/workflow?resourceName=${this.resourceName}&resourceId=${this.resourceId}`)).data;
