@@ -58,7 +58,7 @@ class WorkflowAction extends Action
                 $workflow->apply($model, $this->transition ?? $model->getTransitionForAction($this));
                 $model->save();
             } catch (\Throwable $th) {
-                throw $th;
+                //throw $th;
             }
         }
     }
