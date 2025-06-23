@@ -21,6 +21,10 @@ class WorkflowController
     public function index(Request $request)
     {
         $model = $this->getModelForResource($request->resourceName, $request->resourceId);
+        
+        if (blank($model)) {
+            return [];
+        }
 
         return $this->getWorkflowForModel($model);
     }
