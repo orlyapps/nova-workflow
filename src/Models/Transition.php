@@ -14,6 +14,10 @@ class Transition
 
     public $entered;
 
+    public $label;
+
+    public $name;
+
     protected $userInteraction = true;
 
     public function __construct(string $label, string $name)
