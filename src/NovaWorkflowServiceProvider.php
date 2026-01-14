@@ -57,16 +57,6 @@ class NovaWorkflowServiceProvider extends ServiceProvider
 
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'workflow');
-
-        $this->app->singleton('workflow', function ($app) {
-            $registry = new WorkflowRegistry();
-            foreach ($this->workflows() as $workflow) {
-                $registry->add($workflow);
-            }
-
-            return $registry;
-        });
-        app('workflow');
     }
 
     public function macros()
@@ -130,6 +120,14 @@ class NovaWorkflowServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->singleton('workflow', function ($app) {
+            $registry = new WorkflowRegistry();
+            foreach ($this->workflows() as $workflow) {
+                $registry->add($workflow);
+            }
+
+            return $registry;
+        });
     }
 
     /**
