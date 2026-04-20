@@ -103,7 +103,7 @@
 </template>
 
 <script>
-import { Inertia } from "@inertiajs/inertia";
+import { router as Inertia } from "@inertiajs/vue3";
 import { Button } from "laravel-nova-ui";
 export default {
     components: {
