@@ -103,7 +103,6 @@
 </template>
 
 <script>
-import { router as Inertia } from "@inertiajs/vue3";
 import { Button } from "laravel-nova-ui";
 export default {
     components: {
@@ -120,7 +119,9 @@ export default {
         this.state.transition = [...this.state.transitions.filter((item) => item.userInteraction === true)];
 
         Nova.$on("action-executed", () => {
-            Inertia.reload();
+            const base = Nova.config("base");
+            const path = window.location.pathname.replace(new RegExp("^" + base), "") + window.location.search;
+            Nova.visit(path);
         });
         this.getActions();
     },
