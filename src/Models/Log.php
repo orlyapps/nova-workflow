@@ -11,8 +11,8 @@ class Log extends Model
     protected $fillable = [
         'from', 'to', 'transition', 'comment', 'due_in'
     ];
-    protected $dates = [
-      'created_at', 'updated_at', 'due_at'
+    protected $casts = [
+        'due_at' => 'datetime',
     ];
 
     public function subject(): MorphTo

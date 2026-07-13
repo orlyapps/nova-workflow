@@ -89,7 +89,7 @@ class WorkflowSubscriber implements EventSubscriberInterface
         event(sprintf('workflow.%s.completed.%s', $workflowName, $transitionName), $event);
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'workflow.guard' => ['guardEvent'],
