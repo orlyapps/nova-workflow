@@ -15,8 +15,9 @@ use Throwable;
  * Wendet den Übergang an, den die Person in der Workflow-Card angeklickt hat.
  *
  * Die Card schreibt den Übergang als `?transition=` in die Seiten-URL und löst danach die
- * zugehörige Action aus; hier kommt er über den Referer an. Ohne Card gilt der Übergang,
- * an den die Action per `uriKey()` gebunden ist (`Transition::action()`).
+ * zugehörige Action aus; hier kommt er über den Referer an. Eigene Oberflächen, die die
+ * Action direkt aufrufen, schicken ihn stattdessen als Feld `transition` mit. Ohne beides
+ * gilt der Übergang, an den die Action per `uriKey()` gebunden ist (`Transition::action()`).
  *
  * Unterklassen mit eigener Fachlogik überschreiben {@see applyTransition()} statt
  * `handle()` – Übergangs-Ermittlung, Schleife über alle Datensätze und Fehlermeldung
@@ -36,7 +37,7 @@ class WorkflowAction extends Action
     public $showOnIndex = false;
 
     /**
-     * Der angeklickte Übergang aus der Workflow-Card, `null` ohne Card.
+     * Der angeklickte Übergang, `null` wenn keiner angeklickt wurde.
      *
      * @var string|null
      */
@@ -112,8 +113,15 @@ class WorkflowAction extends Action
         return false;
     }
 
+    /**
+     * Ein mitgeschicktes Feld `transition` geht vor, sonst `?transition=` aus dem Referer.
+     */
     private function clickedTransition(): ?string
     {
+        if (filled(request()->input('transition'))) {
+            return request()->input('transition');
+        }
+
         $query = parse_url((string) request()->headers->get('referer'), PHP_URL_QUERY);
         parse_str((string) $query, $params);
 
