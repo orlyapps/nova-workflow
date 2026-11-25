@@ -44,7 +44,7 @@
                                                 as="button"
                                                 v-for="transition in state.transitions"
                                                 :key="transition.name"
-                                                @click.stop.prevent="apply(transition)"
+                                                @click.prevent="apply(transition)"
                                                 :title="transition.title"
                                             >
                                                 {{ transition.title }}
@@ -159,9 +159,13 @@ export default {
 
             document.querySelector('[dusk="workflow-action-dropdown"]').click();
 
+            // Nur das versteckte Aktionsmenü ausblenden, nicht ein anderes offenes Menü:
+            // Ein ausgeblendetes, aber offenes Menü behält seine Fokusfalle, und die wirft beim
+            // Schließen des Bestätigungsdialogs – der Dialog bleibt dann hängen.
             setTimeout(() => {
-                document.querySelector('[dusk="dropdown-teleported"]').style.display = "none";
-                document.querySelector(`[data-action-id="${transition.action}"]`).click();
+                const actionItem = document.querySelector(`[data-action-id="${transition.action}"]`);
+                actionItem.closest('[dusk="dropdown-teleported"]').style.display = "none";
+                actionItem.click();
 
                 setTimeout(() => {
                     this.loading = false;
